@@ -11,6 +11,7 @@ public class InputView extends LinearLayout {
         super(context);
 
         this.setOrientation(LinearLayout.VERTICAL);
+        setBackgroundColor(0xffc0c0ff);
 
         {
             InputItemView item = new InputItemView(context);
