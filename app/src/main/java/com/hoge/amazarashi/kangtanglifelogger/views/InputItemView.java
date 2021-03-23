@@ -8,12 +8,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hoge.amazarashi.kangtanglifelogger.KTLLTheme;
+import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
 
 public class InputItemView extends LinearLayout {
 
-    private final TagView tagView;
-    private final EditText value;
+    private final TagNameView tagNameView;
+    private final EditText valueView;
 
     public InputItemView(Context context) {
         super(context);
@@ -26,27 +27,37 @@ public class InputItemView extends LinearLayout {
         setPadding(paddingH, paddingV, paddingH, paddingV);
 
         {
-            TagView tagView = this.tagView = new TagView(context);
-            tagView.setLayoutParams(new ViewGroup.LayoutParams(
+            TagNameView tagNameView = this.tagNameView = new TagNameView(context);
+            tagNameView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
-            this.addView(tagView);
+            this.addView(tagNameView);
         }
         {
-            EditText value = this.value = new EditText(context);
-            value.setLayoutParams(new ViewGroup.LayoutParams(
+            EditText valueView = this.valueView = new EditText(context);
+            valueView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
-            this.addView(value);
+            this.addView(valueView);
         }
     }
 
-    private static class TagView extends LinearLayout {
-        private final EditText tag;
+    public Tag generateTag() {
+        String value = valueView.getText().toString();
+        if (value == null) {
+            return null;
+        }
+        return new Tag(
+                tagNameView.getName(),
+                value);
+    }
 
-        public TagView(Context context) {
+    private static class TagNameView extends LinearLayout {
+        private final EditText tagName;
+
+        public TagNameView(Context context) {
             super(context);
 
             final int tagWidth = DisplayMetricsUtil.calcWidth(context, 30);
@@ -63,16 +74,20 @@ public class InputItemView extends LinearLayout {
             }
 
             {
-                EditText tag = this.tag = new EditText(context);
-                tag.setTextColor(KTLLTheme.textColor);
-                tag.setInputType(InputType.TYPE_CLASS_TEXT);
-                tag.setMinWidth(tagWidth);
-                tag.setLayoutParams(new LinearLayout.LayoutParams(
+                EditText tagName = this.tagName = new EditText(context);
+                tagName.setTextColor(KTLLTheme.textColor);
+                tagName.setInputType(InputType.TYPE_CLASS_TEXT);
+                tagName.setMinWidth(tagWidth);
+                tagName.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 ));
-                addView(tag);
+                addView(tagName);
             }
+        }
+
+        public String getName() {
+            return tagName.getText().toString();
         }
     }
 }
