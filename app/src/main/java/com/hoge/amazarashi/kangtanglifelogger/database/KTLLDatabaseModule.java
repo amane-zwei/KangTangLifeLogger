@@ -4,10 +4,6 @@ import android.content.Context;
 
 import androidx.room.Room;
 
-import com.hoge.amazarashi.kangtanglifelogger.application.ApplicationContext;
-
-import java.util.concurrent.Executors;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -18,16 +14,14 @@ public class KTLLDatabaseModule {
 
     private static final String dbName = "ktll-database";
 
-    @ApplicationContext
     private final Context context;
 
-    public KTLLDatabaseModule(@ApplicationContext Context context) {
+    public KTLLDatabaseModule(Context context) {
         this.context = context;
     }
 
     @Singleton
     @Provides
-    @DatabaseContext
     public KTLLDatabase provideDatabase() {
         return Room.databaseBuilder(context, KTLLDatabase.class, dbName)
                 .fallbackToDestructiveMigration()
