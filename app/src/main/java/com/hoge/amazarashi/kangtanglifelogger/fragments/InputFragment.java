@@ -10,15 +10,18 @@ import androidx.fragment.app.Fragment;
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
 import com.hoge.amazarashi.kangtanglifelogger.views.InputView;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 public class InputFragment extends Fragment {
 
     @Inject
-    TagRepository tagRepository;
+    KTLLEventRepository repository;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,11 +35,10 @@ public class InputFragment extends Fragment {
     }
 
     private void onSave(KTLLEvent event) {
-        tagRepository.insert(
-                new Tag(
-                        "test",
-                        "hogehoge"
-                )
-        );
+        event = new KTLLEvent(
+                "20000101",
+                "20991231");
+        event.add(new Tag("hoge", "fuag"));
+        repository.insert(event);
     }
 }

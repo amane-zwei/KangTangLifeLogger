@@ -19,7 +19,7 @@ public class KTLLApplication extends Application {
         applicationComponent = DaggerKTLLApplicationComponent
                 .builder()
                 .kTLLDatabaseModule(new KTLLDatabaseModule(this))
-                .repositoryModule(new RepositoryModule())
+                .repositoryModule(new RepositoryModule(this))
                 .build();
     }
 }

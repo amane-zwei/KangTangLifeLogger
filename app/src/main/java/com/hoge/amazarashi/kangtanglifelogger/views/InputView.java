@@ -48,18 +48,11 @@ public class InputView extends LinearLayout {
     }
 
     private KTLLEvent generateEvent() {
-        List<EventTag> eventTags = new ArrayList<>();
+        KTLLEvent event = new KTLLEvent("20000101", "20991231");
         for (int index = 0; index < items.size(); index++) {
-            Tag tag = items.get(index).generateTag();
-            if (tag == null) {
-                continue;
-            }
-            eventTags.add(new EventTag(tag));
+            event.add(items.get(index).generateTag());
         }
-        return new KTLLEvent(
-                null,
-                null,
-                eventTags);
+        return event;
     }
 
     private void addItem(Context context) {

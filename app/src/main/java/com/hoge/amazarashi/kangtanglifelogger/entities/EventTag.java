@@ -14,8 +14,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity(tableName = "event_tag")
 public class EventTag {
-    public EventTag(Tag tag) {
-        this.event = null;
+    public EventTag(KTLLEvent event, Tag tag) {
+        this.event = event;
         this.tag = tag;
 
 //        this.createDate = new Date();
@@ -46,8 +46,10 @@ public class EventTag {
 //    private Date createDate;
 
     @Ignore
-    KTLLEvent event;
+    @Getter
+    private KTLLEvent event;
 
     @Ignore
+    @Getter
     private Tag tag;
 }

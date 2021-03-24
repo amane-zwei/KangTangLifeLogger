@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,18 +16,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity(tableName = "event")
 public class KTLLEvent {
+    @Ignore
     public KTLLEvent(
             String dateFrom,
-            String dateTo,
-            List<EventTag> children) {
+            String dateTo) {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
-        this.children = children;
-        for (EventTag child : children) {
-            child.event = this;
-        }
+        this.children = new ArrayList<>();
 
 //        this.createDate = new Date();
+    }
+
+    public void add(Tag tag) {
+        if (tag == null) {
+            return;
+        }
+        children.add(new EventTag(this, tag));
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -47,5 +52,6 @@ public class KTLLEvent {
 //    private Date createDate;
 
     @Ignore
+    @Getter
     private List<EventTag> children;
 }
