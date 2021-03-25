@@ -35,10 +35,6 @@ public class InputFragment extends Fragment {
     }
 
     private void onSave(KTLLEvent event) {
-        event = new KTLLEvent(
-                "20000101",
-                "20991231");
-        event.add(new Tag("hoge", "fuag"));
         repository.insert(event);
     }
 }
