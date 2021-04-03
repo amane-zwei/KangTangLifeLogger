@@ -5,24 +5,20 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@Entity(tableName = "event_tag")
-public class EventTag {
-    public EventTag(KTLLEvent event, Tag tag) {
-        this.event = event;
+@Entity(tableName = "action_tag")
+public class ActionTag {
+    public ActionTag(KTLLAction action, Tag tag) {
+        this.action = action;
         this.tag = tag;
-
-//        this.createDate = new Date();
     }
 
-    public EventTag applyId() {
-        eventId = event.getId();
+    public ActionTag applyId() {
+        actionId = action.getId();
         tagId = tag.getId();
         return this;
     }
@@ -32,22 +28,19 @@ public class EventTag {
     @Setter
     private long id;
 
-    @ColumnInfo(name = "event_id")
+    @ColumnInfo(name = "action_id")
     @Getter
     @Setter
-    private long eventId;
+    private long actionId;
 
     @ColumnInfo(name = "tag_id")
     @Getter
     @Setter
     private long tagId;
 
-//    @ColumnInfo(name = "create_date")
-//    private Date createDate;
-
     @Ignore
     @Getter
-    private KTLLEvent event;
+    private KTLLAction action;
 
     @Ignore
     @Getter

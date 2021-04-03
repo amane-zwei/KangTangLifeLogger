@@ -13,20 +13,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@Entity(tableName = "event")
-public class KTLLEvent {
+@Entity(tableName = "action")
+public class KTLLAction {
     @Ignore
-    public KTLLEvent(
-            String title) {
-        this.title = title;
+    public KTLLAction(
+            String actionAt) {
+        this.actionAt = actionAt;
         this.children = new ArrayList<>();
+
+//        this.createDate = new Date();
     }
 
-    public void add(KTLLAction action) {
-        if (action == null) {
+    public void add(Tag tag) {
+        if (tag == null) {
             return;
         }
-        children.add(action);
+        children.add(new ActionTag(this, tag));
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -34,12 +36,12 @@ public class KTLLEvent {
     @Setter
     private long id;
 
-    @ColumnInfo(name = "title")
+    @ColumnInfo(name = "action_at")
     @Getter
     @Setter
-    private String title;
+    private String actionAt;
 
     @Ignore
     @Getter
-    private List<KTLLAction> children;
+    private List<ActionTag> children;
 }

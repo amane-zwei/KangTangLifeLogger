@@ -1,6 +1,7 @@
 package com.hoge.amazarashi.kangtanglifelogger.repositories;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
+import com.hoge.amazarashi.kangtanglifelogger.dao.KTLLActionDao;
 import com.hoge.amazarashi.kangtanglifelogger.dao.KTLLEventDao;
 import com.hoge.amazarashi.kangtanglifelogger.entities.ActionTag;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
@@ -8,24 +9,24 @@ import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
 
 import javax.inject.Inject;
 
-public class KTLLEventRepository {
+public class KTLLActionRepository {
 
-    private final KTLLEventDao dao;
+    private final KTLLActionDao dao;
 
     @Inject
-    KTLLActionRepository actionRepository;
+    ActionTagRepository actionTagRepository;
 
-    public KTLLEventRepository(KTLLApplication application, KTLLEventDao dao) {
+    public KTLLActionRepository(KTLLApplication application, KTLLActionDao dao) {
         this.dao = dao;
         application.getApplicationComponent().inject(this);
     }
 
-    public void insert(KTLLEvent element) {
+    public void insert(KTLLAction element) {
         Executor.IOThread(() -> {
             element.setId(dao.insert(element));
 
-            for (KTLLAction action : element.getChildren()) {
-                actionRepository.insert(action);
+            for (ActionTag actionTag : element.getChildren()) {
+                actionTagRepository.insert(actionTag);
             }
         });
     }

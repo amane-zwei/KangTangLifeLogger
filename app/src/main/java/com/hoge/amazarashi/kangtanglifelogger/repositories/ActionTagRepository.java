@@ -1,27 +1,24 @@
 package com.hoge.amazarashi.kangtanglifelogger.repositories;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
-import com.hoge.amazarashi.kangtanglifelogger.dao.EventTagDao;
-import com.hoge.amazarashi.kangtanglifelogger.database.KTLLDatabase;
-import com.hoge.amazarashi.kangtanglifelogger.entities.EventTag;
+import com.hoge.amazarashi.kangtanglifelogger.dao.ActionTagDao;
+import com.hoge.amazarashi.kangtanglifelogger.entities.ActionTag;
 
 import javax.inject.Inject;
 
-import lombok.AllArgsConstructor;
+public class ActionTagRepository {
 
-public class EventTagRepository {
-
-    private final EventTagDao dao;
+    private final ActionTagDao dao;
 
     @Inject
     TagRepository tagRepository;
 
-    public EventTagRepository(KTLLApplication application, EventTagDao dao) {
+    public ActionTagRepository(KTLLApplication application, ActionTagDao dao) {
         this.dao = dao;
         application.getApplicationComponent().inject(this);
     }
 
-    public void insert(EventTag element) {
+    public void insert(ActionTag element) {
         tagRepository.insert(
                 element.getTag(),
                 () -> Executor.IOThread(

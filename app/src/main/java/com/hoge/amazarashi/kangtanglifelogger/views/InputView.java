@@ -7,9 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.hoge.amazarashi.kangtanglifelogger.entities.EventTag;
+import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
-import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
 
 import java.util.ArrayList;
@@ -48,9 +47,11 @@ public class InputView extends LinearLayout {
     }
 
     private KTLLEvent generateEvent() {
-        KTLLEvent event = new KTLLEvent("20000101", "20991231");
+        KTLLEvent event = new KTLLEvent("sample_title");
+        KTLLAction action = new KTLLAction("20210101");
+        event.add(action);
         for (int index = 0; index < items.size(); index++) {
-            event.add(items.get(index).generateTag());
+            action.add(items.get(index).generateTag());
         }
         return event;
     }
