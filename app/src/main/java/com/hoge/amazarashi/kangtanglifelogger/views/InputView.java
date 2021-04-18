@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
@@ -18,31 +17,37 @@ public class InputView extends LinearLayout {
     private final Button button;
 
     private final PeriodView periodView;
-    private final TagView tagView;
+    private final ScrollValuesView scrollValuesView;
 
     public InputView(Context context) {
         super(context);
+
+        final int marginH = DisplayMetricsUtil.calcPixel(context, 16);
+        final int marginV = DisplayMetricsUtil.calcPixel(context, 8);
 
         this.setOrientation(LinearLayout.VERTICAL);
         setBackgroundColor(0xffc0c0ff);
         setGravity(Gravity.CENTER_HORIZONTAL);
 
-        addView(
-                context,
-                this.periodView = new PeriodView(context),
+        {
+            PeriodView periodView = this.periodView = new PeriodView(context);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(marginH, marginV, marginH, marginV);
+            periodView.setLayoutParams(layoutParams);
+            this.addView(periodView);
+        }
         {
-            tagView = new TagView(context);
-            tagView.add();
+            scrollValuesView = new ScrollValuesView(context);
+            scrollValuesView.add();
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     0,
                     1);
-            tagView.setLayoutParams(layoutParams);
-            this.addView(tagView);
+            scrollValuesView.setLayoutParams(layoutParams);
+            this.addView(scrollValuesView);
         }
-
         {
             Button button = this.button = new Button(context);
             button.setText("save");
@@ -64,22 +69,10 @@ public class InputView extends LinearLayout {
         KTLLEvent event = new KTLLEvent();
         KTLLAction action = new KTLLAction(periodView.getFrom().get());
         event.add(action);
-        for (Value value : tagView.generate()) {
+        for (Value value : scrollValuesView.generateValues()) {
             action.add(value);
         }
         return event;
-    }
-
-    private void addView(Context context, View view, int width, int height) {
-        final int marginH = DisplayMetricsUtil.calcPixel(context, 16);
-        final int marginTop = DisplayMetricsUtil.calcPixel(context, 8);
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                width,
-                height);
-        layoutParams.setMargins(marginH, marginTop, marginH, 0);
-        view.setLayoutParams(layoutParams);
-        this.addView(view);
     }
 
     public interface OnSaveListener {
