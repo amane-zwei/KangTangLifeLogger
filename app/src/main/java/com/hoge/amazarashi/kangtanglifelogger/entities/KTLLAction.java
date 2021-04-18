@@ -24,11 +24,12 @@ public class KTLLAction {
 //        this.createDate = new Date();
     }
 
-    public void add(Item item) {
-        if (item == null) {
+    public void add(Value value) {
+        if (value == null) {
             return;
         }
-        children.add(item);
+        value.setAction(this);
+        children.add(value);
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -43,5 +44,5 @@ public class KTLLAction {
 
     @Ignore
     @Getter
-    private List<Item> children;
+    private List<Value> children;
 }

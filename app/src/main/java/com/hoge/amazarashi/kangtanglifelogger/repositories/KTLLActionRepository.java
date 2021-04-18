@@ -2,7 +2,7 @@ package com.hoge.amazarashi.kangtanglifelogger.repositories;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.dao.KTLLActionDao;
-import com.hoge.amazarashi.kangtanglifelogger.entities.ActionItem;
+import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 
@@ -13,7 +13,7 @@ public class KTLLActionRepository {
     private final KTLLActionDao dao;
 
     @Inject
-    ActionItemRepository actionItemRepository;
+    ValueRepository valueRepository;
 
     public KTLLActionRepository(KTLLApplication application, KTLLActionDao dao) {
         this.dao = dao;
@@ -24,8 +24,8 @@ public class KTLLActionRepository {
         Executor.IOThread(() -> {
             element.setId(dao.insert(element));
 
-            for (Item item : element.getChildren()) {
-                actionItemRepository.insert(new ActionItem(element, item));
+            for (Value value : element.getChildren()) {
+                valueRepository.insert(value);
             }
         });
     }

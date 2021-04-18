@@ -8,7 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hoge.amazarashi.kangtanglifelogger.KTLLTheme;
-import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
+import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
+import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
 
 public class InputItemView extends LinearLayout {
@@ -44,13 +45,22 @@ public class InputItemView extends LinearLayout {
         }
     }
 
-    public Item generateTag() {
+    public Value generateValue() {
         String value = valueView.getText().toString();
         if (value == null) {
             return null;
         }
-        return new Item(
+        return new Value(
+                generateTag(),
                 value);
+    }
+
+    private Tag generateTag() {
+        String tagName = tagNameView.getName();
+        if (tagName == null) {
+            return null;
+        }
+        return new Tag(tagName);
     }
 
     private static class TagNameView extends LinearLayout {

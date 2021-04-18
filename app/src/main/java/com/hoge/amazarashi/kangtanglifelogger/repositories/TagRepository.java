@@ -1,18 +1,18 @@
 package com.hoge.amazarashi.kangtanglifelogger.repositories;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
-import com.hoge.amazarashi.kangtanglifelogger.dao.ItemDao;
-import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
+import com.hoge.amazarashi.kangtanglifelogger.dao.TagDao;
+import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 
-public class ItemRepository {
+public class TagRepository {
 
-    private final ItemDao dao;
+    private final TagDao dao;
 
-    public ItemRepository(KTLLApplication application, ItemDao dao) {
+    public TagRepository(KTLLApplication application, TagDao dao) {
         this.dao = dao;
     }
 
-    public void insert(Item element, Runnable runnable) {
+    public void insert(Tag element, Runnable runnable) {
         if (element == null || element.getId() != 0) {
             runnable.run();
             return;
