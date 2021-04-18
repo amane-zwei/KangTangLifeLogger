@@ -3,10 +3,17 @@ package com.hoge.amazarashi.kangtanglifelogger.views;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Locale;
+
 public class DateView extends LinearLayout {
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault());
+
     private final ISODateView isoDateView;
     private final TimeView freeDateView;
 
@@ -14,8 +21,21 @@ public class DateView extends LinearLayout {
         super(context);
         setOrientation(VERTICAL);
 
+        setBackgroundColor(0xffffffff);
+
         add(isoDateView = new ISODateView(context));
         add(freeDateView = new TimeView(context));
+    }
+
+    public DateView set(Date date) {
+        String dateString = formatter.format(date);
+        isoDateView.set(dateString);
+        freeDateView.set(dateString);
+        return this;
+    }
+
+    public String get() {
+        return freeDateView.getText().toString();
     }
 
     public void add(View view) {
@@ -26,6 +46,13 @@ public class DateView extends LinearLayout {
                 )
         );
         addView(view);
+    }
+
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        freeDateView.setWidth(isoDateView.getMeasuredWidth());
     }
 
     private static class ISODateView extends LinearLayout {
@@ -50,6 +77,14 @@ public class DateView extends LinearLayout {
             add(minute = new TimeView(context));
         }
 
+        public void set(String dateString) {
+            year.setText(dateString.substring(0, 4));
+            month.setText(dateString.substring(4, 6));
+            day.setText(dateString.substring(6, 8));
+            hour.setText(dateString.substring(8, 10));
+            minute.setText(dateString.substring(10, 12));
+        }
+
         public void add(View view) {
             view.setLayoutParams(
                     new LinearLayout.LayoutParams(
@@ -65,6 +100,10 @@ public class DateView extends LinearLayout {
     private static class TimeView extends androidx.appcompat.widget.AppCompatEditText {
         public TimeView(Context context) {
             super(context);
+        }
+
+        public void set(String dateString) {
+            setText(dateString);
         }
     }
 
