@@ -3,10 +3,10 @@ package com.hoge.amazarashi.kangtanglifelogger.dao;
 import androidx.room.Dao;
 import androidx.room.Insert;
 
-import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
+import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 
 @Dao
-public interface TagDao {
+public interface ItemDao {
     @Insert
-    long insert(Tag tag);
+    long insert(Item item);
 }

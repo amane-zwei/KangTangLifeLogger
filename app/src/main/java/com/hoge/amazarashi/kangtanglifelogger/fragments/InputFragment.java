@@ -9,12 +9,8 @@ import androidx.fragment.app.Fragment;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
-import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
-import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
 import com.hoge.amazarashi.kangtanglifelogger.views.InputView;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 

@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@Entity(tableName = "action_tag")
-public class ActionTag {
-    public ActionTag(KTLLAction action, Tag tag) {
+@Entity(tableName = "action_item")
+public class ActionItem {
+    public ActionItem(KTLLAction action, Item item) {
         this.action = action;
-        this.tag = tag;
+        this.item = item;
     }
 
-    public ActionTag applyId() {
+    public ActionItem applyId() {
         actionId = action.getId();
-        tagId = tag.getId();
+        itemId = item.getId();
         return this;
     }
 
@@ -33,10 +33,10 @@ public class ActionTag {
     @Setter
     private long actionId;
 
-    @ColumnInfo(name = "tag_id")
+    @ColumnInfo(name = "item_id")
     @Getter
     @Setter
-    private long tagId;
+    private long itemId;
 
     @Ignore
     @Getter
@@ -44,5 +44,5 @@ public class ActionTag {
 
     @Ignore
     @Getter
-    private Tag tag;
+    private Item item;
 }

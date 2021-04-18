@@ -7,13 +7,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
-import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InputView extends LinearLayout {
 
@@ -66,8 +63,8 @@ public class InputView extends LinearLayout {
         KTLLEvent event = new KTLLEvent();
         KTLLAction action = new KTLLAction(periodView.getFrom().get());
         event.add(action);
-        for (Tag tag : tagView.generate()) {
-            action.add(tag);
+        for (Item item : tagView.generate()) {
+            action.add(item);
         }
         return event;
     }

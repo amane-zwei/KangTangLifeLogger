@@ -9,12 +9,10 @@ import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(tableName = "tag")
-public class Tag {
-    public Tag(
-            String name,
+@Entity(tableName = "item")
+public class Item {
+    public Item(
             String inputValue) {
-        this.name = name;
         this.inputValue = inputValue;
         this.value = inputValue;
 
@@ -26,11 +24,6 @@ public class Tag {
     @Getter
     @Setter
     private long id;
-
-    @ColumnInfo(name = "name")
-    @Getter
-    @Setter
-    private String name;
 
     @ColumnInfo(name = "input_value")
     @Getter

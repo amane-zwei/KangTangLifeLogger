@@ -2,10 +2,10 @@ package com.hoge.amazarashi.kangtanglifelogger.repositories.di;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.database.KTLLDatabase;
-import com.hoge.amazarashi.kangtanglifelogger.repositories.ActionTagRepository;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.ActionItemRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLActionRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
-import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.ItemRepository;
 
 import javax.inject.Singleton;
 
@@ -33,13 +33,13 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    public ActionTagRepository provideActionTagRepository(KTLLDatabase database) {
-        return new ActionTagRepository(application, database.actionTagDao());
+    public ActionItemRepository provideActionItemRepository(KTLLDatabase database) {
+        return new ActionItemRepository(application, database.actionItemDao());
     }
 
     @Singleton
     @Provides
-    public TagRepository provideTagRepository(KTLLDatabase database) {
-        return new TagRepository(application, database.tagDao());
+    public ItemRepository provideItemRepository(KTLLDatabase database) {
+        return new ItemRepository(application, database.itemDao());
     }
 }

@@ -4,9 +4,7 @@ import android.content.Context;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import androidx.appcompat.widget.AppCompatEditText;
-
-import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
+import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +27,8 @@ public class TagView extends ScrollView {
         layout.addView(inputItemView);
     }
 
-    public List<Tag> generate() {
-        List<Tag> result = new ArrayList<>();
+    public List<Item> generate() {
+        List<Item> result = new ArrayList<>();
         for(InputItemView inputItemView : items) {
             result.add(inputItemView.generateTag());
         }
