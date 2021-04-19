@@ -16,9 +16,6 @@ public class KTLLApplication extends Application {
     @Getter
     private KTLLApplicationComponent applicationComponent;
 
-    @Inject
-    TagRepository tagRepository;
-
     @Getter
     private TagList tagList;
 
@@ -32,9 +29,6 @@ public class KTLLApplication extends Application {
                 .repositoryModule(new RepositoryModule(this))
                 .build();
 
-        applicationComponent.inject(this);
-
-        tagList = new TagList();
-        tagRepository.list(list -> tagList.put(list));
+        tagList = new TagList(applicationComponent);
     }
 }

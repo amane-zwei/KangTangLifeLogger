@@ -61,8 +61,13 @@ public class InputValueView extends LinearLayout {
         if (tagName == null) {
             return null;
         }
-        Tag tag = ((KTLLApplication) getContext().getApplicationContext()).getTagList().get(tagName);
-        return tag == null ? new Tag(tagName) : tag;
+        tagName = tagName.trim();
+        if (tagName.length() < 1) {
+            return null;
+        }
+        return ((KTLLApplication) getContext().getApplicationContext())
+                .getTagList()
+                .findOrGenerate(tagName);
     }
 
     private static class TagNameView extends LinearLayout {

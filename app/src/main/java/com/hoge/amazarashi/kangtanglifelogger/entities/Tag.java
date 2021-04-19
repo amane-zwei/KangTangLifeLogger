@@ -2,12 +2,13 @@ package com.hoge.amazarashi.kangtanglifelogger.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(tableName = "tag")
+@Entity(tableName = "tag", indices = {@Index(value = "name", unique = true)})
 public class Tag {
     public Tag(
             String name) {

@@ -1,6 +1,7 @@
 package com.hoge.amazarashi.kangtanglifelogger.application;
 
 import com.hoge.amazarashi.kangtanglifelogger.database.KTLLDatabaseModule;
+import com.hoge.amazarashi.kangtanglifelogger.domain.TagList;
 import com.hoge.amazarashi.kangtanglifelogger.fragments.InputFragment;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.ValueRepository;
@@ -18,8 +19,8 @@ import dagger.Component;
         KTLLDatabaseModule.class,
         RepositoryModule.class})
 public interface KTLLApplicationComponent {
-    void inject(KTLLApplication application);
     void inject(InputFragment inputFragment);
+    void inject(TagList tagList);
 
     void inject(KTLLEventRepository repository);
     void inject(KTLLActionRepository repository);
