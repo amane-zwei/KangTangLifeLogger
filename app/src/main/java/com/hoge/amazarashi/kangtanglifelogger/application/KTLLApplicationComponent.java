@@ -18,6 +18,7 @@ import dagger.Component;
         KTLLDatabaseModule.class,
         RepositoryModule.class})
 public interface KTLLApplicationComponent {
+    void inject(KTLLApplication application);
     void inject(InputFragment inputFragment);
 
     void inject(KTLLEventRepository repository);

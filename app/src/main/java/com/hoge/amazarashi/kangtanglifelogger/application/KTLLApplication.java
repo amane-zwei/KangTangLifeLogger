@@ -3,7 +3,11 @@ package com.hoge.amazarashi.kangtanglifelogger.application;
 import android.app.Application;
 
 import com.hoge.amazarashi.kangtanglifelogger.database.KTLLDatabaseModule;
+import com.hoge.amazarashi.kangtanglifelogger.domain.TagList;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.di.RepositoryModule;
+
+import javax.inject.Inject;
 
 import lombok.Getter;
 
@@ -11,6 +15,12 @@ public class KTLLApplication extends Application {
 
     @Getter
     private KTLLApplicationComponent applicationComponent;
+
+    @Inject
+    TagRepository tagRepository;
+
+    @Getter
+    private TagList tagList;
 
     @Override
     public void onCreate() {
@@ -21,5 +31,10 @@ public class KTLLApplication extends Application {
                 .kTLLDatabaseModule(new KTLLDatabaseModule(this))
                 .repositoryModule(new RepositoryModule(this))
                 .build();
+
+        applicationComponent.inject(this);
+
+        tagList = new TagList();
+        tagRepository.list(list -> tagList.put(list));
     }
 }

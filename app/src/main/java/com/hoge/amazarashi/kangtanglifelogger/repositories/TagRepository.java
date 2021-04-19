@@ -4,6 +4,8 @@ import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.dao.TagDao;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 
+import java.util.List;
+
 public class TagRepository {
 
     private final TagDao dao;
@@ -21,5 +23,13 @@ public class TagRepository {
             element.setId(dao.insert(element));
             runnable.run();
         });
+    }
+
+    public void list(TagListListener listener) {
+        Executor.IOThread(() -> listener.onLoaded(dao.list()));
+    }
+
+    public interface TagListListener {
+        void onLoaded(List<Tag> list);
     }
 }
