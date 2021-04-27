@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
+import com.hoge.amazarashi.kangtanglifelogger.fragments.dialogs.ExportDialog;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
 
 public class InputView extends LinearLayout {
@@ -28,6 +31,20 @@ public class InputView extends LinearLayout {
         this.setOrientation(LinearLayout.VERTICAL);
         setBackgroundColor(0xffc0c0ff);
         setGravity(Gravity.CENTER_HORIZONTAL);
+
+        {
+            Button button = new Button(context);
+            button.setText("三");
+            button.setOnClickListener(v -> new ExportDialog()
+                    .show(((AppCompatActivity) context).getSupportFragmentManager(), "menu"));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.gravity = Gravity.LEFT;
+            button.setLayoutParams(layoutParams);
+            this.addView(button);
+        }
 
         {
             PeriodView periodView = this.periodView = new PeriodView(context);
