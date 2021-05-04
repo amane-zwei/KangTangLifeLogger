@@ -7,6 +7,7 @@ import com.hoge.amazarashi.kangtanglifelogger.repositories.ValueRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLActionRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.ItemRepository;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.strorages.BackupRepository;
 
 import javax.inject.Singleton;
 
@@ -48,5 +49,12 @@ public class RepositoryModule {
     @Provides
     public ItemRepository provideItemRepository(KTLLDatabase database) {
         return new ItemRepository(application, database.itemDao());
+    }
+
+
+    @Singleton
+    @Provides
+    public BackupRepository provideBackupRepository() {
+        return new BackupRepository(application);
     }
 }

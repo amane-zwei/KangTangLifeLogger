@@ -4,6 +4,8 @@ import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.dao.ItemDao;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 
+import java.util.List;
+
 public class ItemRepository {
 
     private final ItemDao dao;
@@ -21,5 +23,9 @@ public class ItemRepository {
             element.setId(dao.insert(element));
             runnable.run();
         });
+    }
+
+    public List<Item> listAll() {
+        return dao.listAll();
     }
 }

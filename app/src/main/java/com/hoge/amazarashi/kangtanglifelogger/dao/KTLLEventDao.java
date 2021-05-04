@@ -3,9 +3,12 @@ package com.hoge.amazarashi.kangtanglifelogger.dao;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.Query;
 import androidx.room.Update;
 
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
+
+import java.util.List;
 
 @Dao
 public interface KTLLEventDao {
@@ -20,4 +23,7 @@ public interface KTLLEventDao {
 
     @Delete
     void delete(KTLLEvent event);
+
+    @Query("select * from `event`")
+    List<KTLLEvent> listAll();
 }

@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -62,15 +64,18 @@ public class Value {
     private String value;
 
     @Ignore
+    @JsonIgnore
     @Getter
     @Setter
     private KTLLAction action;
 
     @Ignore
+    @JsonIgnore
     @Getter
     private Tag tag;
 
     @Ignore
+    @JsonIgnore
     @Getter
     private Item item;
 }

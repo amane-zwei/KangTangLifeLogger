@@ -4,6 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class KTLLEvent {
     private long id;
 
     @Ignore
+    @JsonIgnore
     @Getter
     private final List<KTLLAction> children;
 }

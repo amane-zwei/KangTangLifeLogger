@@ -6,6 +6,8 @@ import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 public class KTLLActionRepository {
@@ -28,5 +30,9 @@ public class KTLLActionRepository {
                 valueRepository.insert(value);
             }
         });
+    }
+
+    public List<KTLLAction> listAll() {
+        return dao.listAll();
     }
 }

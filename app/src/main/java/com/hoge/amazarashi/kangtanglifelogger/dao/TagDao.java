@@ -15,4 +15,7 @@ public interface TagDao {
 
     @Query("select * from tag order by name")
     List<Tag> list();
+
+    @Query("select * from tag")
+    List<Tag> listAll();
 }

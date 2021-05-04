@@ -1,0 +1,83 @@
+package com.hoge.amazarashi.kangtanglifelogger.repositories.strorages;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.ItemRepository;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLActionRepository;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.ValueRepository;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import javax.inject.Inject;
+
+public class BackupRepository {
+
+    private static final String itemFileName = "item.json";
+    private static final String actionFileName = "action.json";
+    private static final String eventFileName = "event.json";
+    private static final String tagFileName = "tag.json";
+    private static final String valueFileName = "value.json";
+
+    @Inject
+    ItemRepository itemRepository;
+    @Inject
+    KTLLActionRepository ktllActionRepository;
+    @Inject
+    KTLLEventRepository ktllEventRepository;
+    @Inject
+    TagRepository tagRepository;
+    @Inject
+    ValueRepository valueRepository;
+
+    public BackupRepository(KTLLApplication application) {
+        application.getApplicationComponent().inject(this);
+    }
+
+    public void exportData(File file) {
+        save(file);
+    }
+
+    public void importData() {
+
+    }
+
+    private void save(File file) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+                putFile(zipOutputStream, itemFileName, objectMapper.writeValueAsBytes(itemRepository.listAll()));
+                putFile(zipOutputStream, actionFileName, objectMapper.writeValueAsBytes(ktllActionRepository.listAll()));
+                putFile(zipOutputStream, eventFileName, objectMapper.writeValueAsBytes(ktllEventRepository.listAll()));
+                putFile(zipOutputStream, tagFileName, objectMapper.writeValueAsBytes(tagRepository.listAll()));
+                putFile(zipOutputStream, valueFileName, objectMapper.writeValueAsBytes(valueRepository.listAll()));
+
+                zipOutputStream.close();
+                fileOutputStream.close();
+            } catch (IOException ignored) {
+            }
+        });
+    }
+
+    private void putFile(ZipOutputStream zipOutputStream, String fileName, byte[] data) throws IOException {
+        ZipEntry zipEntry = new ZipEntry(fileName);
+        zipOutputStream.putNextEntry(zipEntry);
+        zipOutputStream.write(data);
+    }
+
+    private interface OutputFunction {
+        Object apply();
+    }
+}

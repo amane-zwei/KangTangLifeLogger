@@ -2,6 +2,7 @@ package com.hoge.amazarashi.kangtanglifelogger.repositories;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.dao.TagDao;
+import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 
 import java.util.List;
@@ -27,6 +28,10 @@ public class TagRepository {
 
     public void list(TagListListener listener) {
         Executor.IOThread(() -> listener.onLoaded(dao.list()));
+    }
+
+    public List<Tag> listAll() {
+        return dao.listAll();
     }
 
     public interface TagListListener {
