@@ -13,9 +13,16 @@ public interface TagDao {
     @Insert
     long insert(Tag tag);
 
+    @Insert
+    long insert(List<Tag> tags);
+
     @Query("select * from tag order by name")
     List<Tag> list();
 
     @Query("select * from tag")
     List<Tag> listAll();
+
+    @Query("delete from tag")
+    void deleteAll();
+
 }

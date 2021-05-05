@@ -14,6 +14,12 @@ public interface ItemDao {
     @Insert
     long insert(Item item);
 
+    @Insert
+    long insert(List<Item> items);
+
     @Query("select * from item")
     List<Item> listAll();
+
+    @Query("delete from item")
+    void deleteAll();
 }

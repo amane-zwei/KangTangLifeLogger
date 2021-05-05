@@ -1,5 +1,8 @@
 package com.hoge.amazarashi.kangtanglifelogger.repositories.strorages;
 
+import android.content.Context;
+import android.net.Uri;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
@@ -9,9 +12,8 @@ import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.ValueRepository;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -41,19 +43,19 @@ public class BackupRepository {
         application.getApplicationComponent().inject(this);
     }
 
-    public void exportData(File file) {
-        save(file);
+    public void exportData(Context context, Uri uri) {
+        save(context, uri);
     }
 
     public void importData() {
 
     }
 
-    private void save(File file) {
+    private void save(Context context, Uri uri) {
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+                OutputStream oStream = context.getContentResolver().openOutputStream(uri);
+                ZipOutputStream zipOutputStream = new ZipOutputStream(oStream);
 
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -65,7 +67,7 @@ public class BackupRepository {
                 putFile(zipOutputStream, valueFileName, objectMapper.writeValueAsBytes(valueRepository.listAll()));
 
                 zipOutputStream.close();
-                fileOutputStream.close();
+                oStream.close();
             } catch (IOException ignored) {
             }
         });

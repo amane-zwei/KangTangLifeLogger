@@ -36,4 +36,8 @@ public class KTLLEventRepository {
         return dao.listAll();
     }
 
+    public void replace(List<KTLLEvent> events) {
+        dao.deleteAll();
+        dao.insert(events);
+    }
 }

@@ -28,4 +28,9 @@ public class ItemRepository {
     public List<Item> listAll() {
         return dao.listAll();
     }
+
+    public void replace(List<Item> items) {
+        dao.deleteAll();
+        dao.insert(items);
+    }
 }

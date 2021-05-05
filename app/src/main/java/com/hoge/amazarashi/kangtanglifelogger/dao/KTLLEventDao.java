@@ -18,6 +18,9 @@ public interface KTLLEventDao {
     @Insert
     long insert(KTLLEvent event);
 
+    @Insert
+    long insert(List<KTLLEvent> events);
+
     @Update
     void update(KTLLEvent event);
 
@@ -26,4 +29,8 @@ public interface KTLLEventDao {
 
     @Query("select * from `event`")
     List<KTLLEvent> listAll();
+
+    @Query("delete from `event`")
+    void deleteAll();
+
 }

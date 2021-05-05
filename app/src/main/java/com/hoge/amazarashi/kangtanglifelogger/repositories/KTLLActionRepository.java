@@ -35,4 +35,9 @@ public class KTLLActionRepository {
     public List<KTLLAction> listAll() {
         return dao.listAll();
     }
+
+    public void replace(List<KTLLAction> actions) {
+        dao.deleteAll();
+        dao.insert(actions);
+    }
 }

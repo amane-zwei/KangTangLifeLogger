@@ -1,22 +1,19 @@
 package com.hoge.amazarashi.kangtanglifelogger.fragments.dialogs;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import com.hoge.amazarashi.kangtanglifelogger.MainActivity;
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.strorages.BackupRepository;
 
@@ -26,11 +23,12 @@ import javax.inject.Inject;
 
 public class ExportDialog extends KTLLDialogFragment {
 
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static final String[] PERMISSIONS_STORAGE = {
-//            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
+//    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_CREATE_FILE = 1;
+//    private static final String[] PERMISSIONS_STORAGE = {
+////            Manifest.permission.READ_EXTERNAL_STORAGE,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE
+//    };
 
     public ExportDialog() {
         super();
@@ -40,7 +38,8 @@ public class ExportDialog extends KTLLDialogFragment {
     BackupRepository backupRepository;
 
     @Override
-    public @NonNull Dialog onCreateDialog(@Nullable Bundle bundle) {
+    public @NonNull
+    Dialog onCreateDialog(@Nullable Bundle bundle) {
         KTLLApplication application = (KTLLApplication) getContext().getApplicationContext();
         application.getApplicationComponent().inject(this);
 
@@ -74,7 +73,27 @@ public class ExportDialog extends KTLLDialogFragment {
         }
 
         private void onBackup(View view) {
-            backupRepository.exportData(new File(getContext().getFilesDir(), "ktll-backup.zip"));
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.setType("application/zip");
+            intent.putExtra(Intent.EXTRA_TITLE, "ktll-backup.zip");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(Intent.createChooser(intent, "Create a file"), REQUEST_CREATE_FILE);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    backupRepository.exportData(getContext(), uri);
+                }
+            }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     }
 }

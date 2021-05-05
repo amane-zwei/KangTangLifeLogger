@@ -20,6 +20,9 @@ public interface KTLLActionDao {
     @Insert
     long insert(KTLLAction action);
 
+    @Insert
+    long insert(List<KTLLAction> actions);
+
     @Update
     void update(KTLLAction action);
 
@@ -28,4 +31,7 @@ public interface KTLLActionDao {
 
     @Query("select * from `action`")
     List<KTLLAction> listAll();
+
+    @Query("delete from `action`")
+    void deleteAll();
 }

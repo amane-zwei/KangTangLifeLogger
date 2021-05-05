@@ -13,7 +13,12 @@ public interface ValueDao {
     @Insert
     long insert(Value value);
 
+    @Insert
+    long insert(List<Value> values);
+
     @Query("select * from value")
     List<Value> listAll();
 
+    @Query("delete from value")
+    void deleteAll();
 }

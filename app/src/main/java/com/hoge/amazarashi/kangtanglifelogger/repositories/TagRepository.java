@@ -34,6 +34,11 @@ public class TagRepository {
         return dao.listAll();
     }
 
+    public void replace(List<Tag> tags) {
+        dao.deleteAll();
+        dao.insert(tags);
+    }
+
     public interface TagListListener {
         void onLoaded(List<Tag> list);
     }
