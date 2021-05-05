@@ -1,13 +1,15 @@
 package com.hoge.amazarashi.kangtanglifelogger.views;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.hoge.amazarashi.kangtanglifelogger.drawables.DividerDrawable;
+
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Locale;
 
@@ -21,7 +23,15 @@ public class DateView extends LinearLayout {
         super(context);
         setOrientation(VERTICAL);
 
-        setBackgroundColor(0xffffffff);
+        GradientDrawable background = new GradientDrawable();
+        background.setColor(0xffffffff);
+        background.setCornerRadius(5);
+        setBackground(background);
+
+        setDividerDrawable(new DividerDrawable(5));
+        setShowDividers(SHOW_DIVIDER_MIDDLE);
+
+        setPadding(5, 5, 5, 5);
 
         add(isoDateView = new ISODateView(context));
         add(freeDateView = new TimeView(context));
@@ -97,9 +107,10 @@ public class DateView extends LinearLayout {
 
     }
 
-    private static class TimeView extends androidx.appcompat.widget.AppCompatEditText {
+    private static class TimeView extends KTLLEditText {
         public TimeView(Context context) {
             super(context);
+            setInputType(InputType.TYPE_CLASS_NUMBER);
         }
 
         public void set(String dateString) {
@@ -117,4 +128,5 @@ public class DateView extends LinearLayout {
             return this;
         }
     }
+
 }

@@ -27,6 +27,7 @@ public class ScrollValuesView extends ScrollView {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(20, 0, 20, 20);
         inputValueView.setLayoutParams(layoutParams);
         items.add(inputValueView);
         layout.addView(inputValueView);

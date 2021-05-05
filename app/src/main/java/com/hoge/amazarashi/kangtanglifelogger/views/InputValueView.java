@@ -1,14 +1,15 @@
 package com.hoge.amazarashi.kangtanglifelogger.views;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.text.InputType;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hoge.amazarashi.kangtanglifelogger.KTLLTheme;
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
+import com.hoge.amazarashi.kangtanglifelogger.drawables.DividerDrawable;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
@@ -16,7 +17,7 @@ import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
 public class InputValueView extends LinearLayout {
 
     private final TagNameView tagNameView;
-    private final EditText valueView;
+    private final KTLLEditText valueView;
 
     public InputValueView(Context context) {
         super(context);
@@ -25,7 +26,14 @@ public class InputValueView extends LinearLayout {
         final int paddingV = DisplayMetricsUtil.calcPixel(context, 8);
 
         this.setOrientation(LinearLayout.VERTICAL);
-        setBackgroundColor(0xffffffff);
+        setDividerDrawable(new DividerDrawable(5));
+        setShowDividers(SHOW_DIVIDER_MIDDLE);
+
+        final GradientDrawable background = new GradientDrawable();
+        background.setColor(0xffffffff);
+        background.setCornerRadius(5);
+        setBackground(background);
+
         setPadding(paddingH, paddingV, paddingH, paddingV);
 
         {
@@ -37,7 +45,7 @@ public class InputValueView extends LinearLayout {
             this.addView(tagNameView);
         }
         {
-            EditText valueView = this.valueView = new EditText(context);
+            KTLLEditText valueView = this.valueView = new KTLLEditText(context);
             valueView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
@@ -71,7 +79,7 @@ public class InputValueView extends LinearLayout {
     }
 
     private static class TagNameView extends LinearLayout {
-        private final EditText tagName;
+        private final KTLLEditText tagName;
 
         public TagNameView(Context context) {
             super(context);
@@ -90,7 +98,7 @@ public class InputValueView extends LinearLayout {
             }
 
             {
-                EditText tagName = this.tagName = new EditText(context);
+                KTLLEditText tagName = this.tagName = new KTLLEditText(context);
                 tagName.setTextColor(KTLLTheme.textColor);
                 tagName.setInputType(InputType.TYPE_CLASS_TEXT);
                 tagName.setMinWidth(tagWidth);

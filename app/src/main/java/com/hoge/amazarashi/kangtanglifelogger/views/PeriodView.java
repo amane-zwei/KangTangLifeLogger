@@ -16,8 +16,6 @@ import lombok.Getter;
 public class PeriodView extends LinearLayout {
     @Getter
     private final DateView from;
-    @Getter
-    private final DateView to;
 
     public PeriodView(Context context) {
         super(context);
@@ -26,13 +24,6 @@ public class PeriodView extends LinearLayout {
         setGravity(Gravity.CENTER_VERTICAL);
 
         add(from = new DateView(context).set(new Date(System.currentTimeMillis())));
-        {
-            TextView label = new TextView(context);
-            label.setTextColor(KTLLTheme.textColor);
-            label.setText("-");
-            add(label);
-        }
-        add(to = new DateView(context));
     }
 
     public void add(View view) {
