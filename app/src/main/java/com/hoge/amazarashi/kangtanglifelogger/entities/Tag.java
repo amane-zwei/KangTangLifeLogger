@@ -6,8 +6,10 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Entity(tableName = "tag", indices = {@Index(value = "name", unique = true)})
 public class Tag {
     public Tag(

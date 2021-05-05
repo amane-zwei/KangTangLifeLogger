@@ -14,7 +14,7 @@ public interface ValueDao {
     long insert(Value value);
 
     @Insert
-    long insert(List<Value> values);
+    void insert(List<Value> values);
 
     @Query("select * from value")
     List<Value> listAll();

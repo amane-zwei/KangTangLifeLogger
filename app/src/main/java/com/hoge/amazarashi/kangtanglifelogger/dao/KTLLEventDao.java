@@ -19,7 +19,7 @@ public interface KTLLEventDao {
     long insert(KTLLEvent event);
 
     @Insert
-    long insert(List<KTLLEvent> events);
+    void insert(List<KTLLEvent> events);
 
     @Update
     void update(KTLLEvent event);

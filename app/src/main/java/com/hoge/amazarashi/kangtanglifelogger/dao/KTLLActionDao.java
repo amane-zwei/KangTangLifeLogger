@@ -21,7 +21,7 @@ public interface KTLLActionDao {
     long insert(KTLLAction action);
 
     @Insert
-    long insert(List<KTLLAction> actions);
+    void insert(List<KTLLAction> actions);
 
     @Update
     void update(KTLLAction action);

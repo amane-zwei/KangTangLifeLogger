@@ -15,7 +15,7 @@ public interface ItemDao {
     long insert(Item item);
 
     @Insert
-    long insert(List<Item> items);
+    void insert(List<Item> items);
 
     @Query("select * from item")
     List<Item> listAll();

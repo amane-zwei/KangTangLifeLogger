@@ -1,6 +1,5 @@
 package com.hoge.amazarashi.kangtanglifelogger.fragments.dialogs;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -17,18 +16,12 @@ import androidx.annotation.Nullable;
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.strorages.BackupRepository;
 
-import java.io.File;
-
 import javax.inject.Inject;
 
 public class ExportDialog extends KTLLDialogFragment {
 
-//    private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static final int REQUEST_CREATE_FILE = 1;
-//    private static final String[] PERMISSIONS_STORAGE = {
-////            Manifest.permission.READ_EXTERNAL_STORAGE,
-//            Manifest.permission.WRITE_EXTERNAL_STORAGE
-//    };
+    private static final int REQUEST_READ_FILE = 2;
 
     public ExportDialog() {
         super();
@@ -40,9 +33,11 @@ public class ExportDialog extends KTLLDialogFragment {
     @Override
     public @NonNull
     Dialog onCreateDialog(@Nullable Bundle bundle) {
-        KTLLApplication application = (KTLLApplication) getContext().getApplicationContext();
-        application.getApplicationComponent().inject(this);
-
+        Context context = getContext();
+        if (context != null) {
+            KTLLApplication application = (KTLLApplication) getContext().getApplicationContext();
+            application.getApplicationComponent().inject(this);
+        }
         return super.onCreateDialog(bundle);
     }
 
@@ -68,6 +63,7 @@ public class ExportDialog extends KTLLDialogFragment {
             {
                 Button button = new Button(context);
                 button.setText("import");
+                button.setOnClickListener(this::onRestore);
                 addView(button);
             }
         }
@@ -79,21 +75,28 @@ public class ExportDialog extends KTLLDialogFragment {
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             startActivityForResult(Intent.createChooser(intent, "Create a file"), REQUEST_CREATE_FILE);
         }
+
+        private void onRestore(View view) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("application/zip");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(Intent.createChooser(intent, "Read a file"), REQUEST_READ_FILE);
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                Uri uri = data.getData();
-                if (uri != null) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                if (requestCode == REQUEST_CREATE_FILE) {
                     backupRepository.exportData(getContext(), uri);
+                } else if (requestCode == REQUEST_READ_FILE) {
+                    backupRepository.importData(getContext(), uri);
                 }
             }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        }
     }
 }

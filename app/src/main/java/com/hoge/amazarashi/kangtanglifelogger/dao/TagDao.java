@@ -14,7 +14,7 @@ public interface TagDao {
     long insert(Tag tag);
 
     @Insert
-    long insert(List<Tag> tags);
+    void insert(List<Tag> tags);
 
     @Query("select * from tag order by name")
     List<Tag> list();
