@@ -38,6 +38,7 @@ public class InputValueView extends LinearLayout {
 
         {
             TagNameView tagNameView = this.tagNameView = new TagNameView(context);
+            tagNameView.setBackgroundColor(0xffffa0a0);
             tagNameView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
@@ -88,7 +89,7 @@ public class InputValueView extends LinearLayout {
 
             {
                 TextView label = new TextView(context);
-                label.setText("#");
+                label.setText("# ");
                 label.setTextColor(KTLLTheme.textColor);
                 label.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
