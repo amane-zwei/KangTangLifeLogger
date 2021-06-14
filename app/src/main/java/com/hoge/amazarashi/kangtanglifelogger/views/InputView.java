@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -97,6 +98,19 @@ public class InputView extends CoordinatorLayout {
             layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
             scrollValuesView.setLayoutParams(layoutParams);
             layout.addView(scrollValuesView);
+        }
+        {
+            ImageButton imageButton = new ImageButton(context);
+            imageButton.setImageResource(R.drawable.ic_baseline_note_add_24);
+            imageButton.setImageTintList(ColorStateList.valueOf(0xffffff00));
+            imageButton.setOnClickListener(view -> scrollValuesView.add());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+//            layoutParams.setMargins(marginH, marginV, marginH, marginV);
+            layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+            imageButton.setLayoutParams(layoutParams);
+            layout.addView(imageButton);
         }
         return layout;
     }

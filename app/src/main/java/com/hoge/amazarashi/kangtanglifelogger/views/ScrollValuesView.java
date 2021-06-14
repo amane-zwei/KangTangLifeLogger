@@ -18,7 +18,11 @@ public class ScrollValuesView extends ScrollView {
     public ScrollValuesView(Context context) {
         super(context);
 
-        addView(layout = new LinearLayout(context));
+        {
+            LinearLayout layout = this.layout = new LinearLayout(context);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            addView(layout);
+        }
         items = new ArrayList<>();
     }
 
@@ -31,6 +35,7 @@ public class ScrollValuesView extends ScrollView {
         inputValueView.setLayoutParams(layoutParams);
         items.add(inputValueView);
         layout.addView(inputValueView);
+        invalidate();
     }
 
     public List<Value> generateValues() {
