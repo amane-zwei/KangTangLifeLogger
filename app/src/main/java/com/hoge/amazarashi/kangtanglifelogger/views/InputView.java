@@ -83,7 +83,7 @@ public class InputView extends CoordinatorLayout {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(marginH, marginV, marginH, marginV);
+            layoutParams.setMargins(marginH, marginV, marginH, 0);
             layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
             periodView.setLayoutParams(layoutParams);
             layout.addView(periodView);
