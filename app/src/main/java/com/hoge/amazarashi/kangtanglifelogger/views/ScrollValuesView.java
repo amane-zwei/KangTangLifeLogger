@@ -21,6 +21,7 @@ public class ScrollValuesView extends ScrollView {
         {
             LinearLayout layout = this.layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.VERTICAL);
+            layout.setPadding(0,0,0,80);
             addView(layout);
         }
         items = new ArrayList<>();

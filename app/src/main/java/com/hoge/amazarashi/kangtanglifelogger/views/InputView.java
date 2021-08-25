@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -52,23 +53,24 @@ public class InputView extends CoordinatorLayout {
             View mainView = createMainView(context);
             mainView.setId(mainViewId);
             CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
             mainView.setLayoutParams(layoutParams);
             this.addView(mainView);
         }
+        this.addView(this.button = createFloatingButton(
+                context,
+                mainViewId,
+                R.drawable.ic_baseline_add_24,
+                Gravity.BOTTOM | Gravity.RIGHT));
         {
-            FloatingActionButton button = this.button = new FloatingActionButton(context);
-            button.setImageResource(R.drawable.ic_baseline_add_24);
-            button.setBackgroundTintList(ColorStateList.valueOf(0xffffa0a0));
-            CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            layoutParams.setAnchorId(mainViewId);
-            layoutParams.anchorGravity = Gravity.BOTTOM | Gravity.RIGHT | Gravity.END;
-            button.setLayoutParams(layoutParams);
-            this.addView(button);
+            FloatingActionButton button = createFloatingButton(
+                    context,
+                    mainViewId,
+                    R.drawable.ic_baseline_add_24,
+                    Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+            button.setOnClickListener(view -> scrollValuesView.add());
+            addView(button);
         }
     }
 
@@ -99,20 +101,25 @@ public class InputView extends CoordinatorLayout {
             scrollValuesView.setLayoutParams(layoutParams);
             layout.addView(scrollValuesView);
         }
-        {
-            ImageButton imageButton = new ImageButton(context);
-            imageButton.setImageResource(R.drawable.ic_baseline_note_add_24);
-            imageButton.setImageTintList(ColorStateList.valueOf(0xffffff00));
-            imageButton.setOnClickListener(view -> scrollValuesView.add());
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-//            layoutParams.setMargins(marginH, marginV, marginH, marginV);
-            layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-            imageButton.setLayoutParams(layoutParams);
-            layout.addView(imageButton);
-        }
         return layout;
+    }
+
+    private FloatingActionButton createFloatingButton(
+            Context context,
+            int mainViewId,
+            @DrawableRes int drawable,
+            int gravity) {
+        FloatingActionButton button = new FloatingActionButton(context);
+        button.setImageResource(drawable);
+        button.setBackgroundTintList(ColorStateList.valueOf(0xffffa0a0));
+        CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.setAnchorId(mainViewId);
+        layoutParams.anchorGravity = gravity;
+        button.setLayoutParams(layoutParams);
+        return button;
     }
 
     public void setOnSaveListener(OnSaveListener listener) {
