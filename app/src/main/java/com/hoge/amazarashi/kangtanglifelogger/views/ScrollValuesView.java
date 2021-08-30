@@ -29,6 +29,10 @@ public class ScrollValuesView extends ScrollView {
 
     public void add() {
         InputValueView inputValueView = new InputValueView(getContext());
+        inputValueView.setOnClickDelete((view) -> {
+            items.remove(inputValueView);
+            layout.removeView(inputValueView);
+        });
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);

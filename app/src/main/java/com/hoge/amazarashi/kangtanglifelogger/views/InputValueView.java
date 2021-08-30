@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.text.InputType;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ public class InputValueView extends LinearLayout {
 
     private final TagNameView tagNameView;
     private final KTLLEditText valueView;
+    private final Button deleteButton;
 
     public InputValueView(Context context) {
         super(context);
@@ -25,7 +27,7 @@ public class InputValueView extends LinearLayout {
         final int paddingH = DisplayMetricsUtil.calcPixel(context, 16);
         final int paddingV = DisplayMetricsUtil.calcPixel(context, 8);
 
-        this.setOrientation(LinearLayout.VERTICAL);
+        this.setOrientation(LinearLayout.HORIZONTAL);
         setDividerDrawable(new DividerDrawable(5));
         setShowDividers(SHOW_DIVIDER_MIDDLE);
 
@@ -36,6 +38,15 @@ public class InputValueView extends LinearLayout {
 
         setPadding(paddingH, paddingV, paddingH, paddingV);
 
+        LinearLayout left = new LinearLayout(context);
+        left.setOrientation(LinearLayout.VERTICAL);
+        left.setLayoutParams(new LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1
+        ));
+        addView(left);
+
         {
             TagNameView tagNameView = this.tagNameView = new TagNameView(context);
             tagNameView.setBackgroundColor(0xffffa0a0);
@@ -43,7 +54,7 @@ public class InputValueView extends LinearLayout {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
-            this.addView(tagNameView);
+            left.addView(tagNameView);
         }
         {
             KTLLEditText valueView = this.valueView = new KTLLEditText(context);
@@ -51,8 +62,22 @@ public class InputValueView extends LinearLayout {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
-            this.addView(valueView);
+            left.addView(valueView);
         }
+
+        {
+            Button button = this.deleteButton = new Button(context);
+            button.setText("x");
+            button.setLayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            this.addView(button);
+        }
+    }
+
+    public void setOnClickDelete(OnClickListener listener) {
+        deleteButton.setOnClickListener(listener);
     }
 
     public Value generateValue() {
