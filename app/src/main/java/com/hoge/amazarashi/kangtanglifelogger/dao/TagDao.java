@@ -16,6 +16,9 @@ public interface TagDao {
     @Insert
     void insert(List<Tag> tags);
 
+    @Query("select * from tag where name = :name")
+    Tag find(String name);
+
     @Query("select * from tag order by name")
     List<Tag> list();
 

@@ -5,15 +5,18 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
+import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService.ValueRecord;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 public class ScrollValuesView extends ScrollView {
 
     private final LinearLayout layout;
-    private final List<InputValueView> items;
+    @Getter
+    private final List<ValueRecord> values;
 
     public ScrollValuesView(Context context) {
         super(context);
@@ -24,13 +27,17 @@ public class ScrollValuesView extends ScrollView {
             layout.setPadding(0,0,0,80);
             addView(layout);
         }
-        items = new ArrayList<>();
+        values = new ArrayList<>();
     }
 
     public void add() {
-        InputValueView inputValueView = new InputValueView(getContext());
+        final ValueRecord valueRecord = new ValueRecord();
+        values.add(valueRecord);
+
+        final InputValueView inputValueView = new InputValueView(getContext());
+        inputValueView.setValueRecord(valueRecord);
         inputValueView.setOnClickDelete((view) -> {
-            items.remove(inputValueView);
+            values.remove(valueRecord);
             layout.removeView(inputValueView);
         });
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -38,16 +45,7 @@ public class ScrollValuesView extends ScrollView {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(20, 20, 20, 0);
         inputValueView.setLayoutParams(layoutParams);
-        items.add(inputValueView);
         layout.addView(inputValueView);
         invalidate();
-    }
-
-    public List<Value> generateValues() {
-        List<Value> result = new ArrayList<>();
-        for(InputValueView inputValueView : items) {
-            result.add(inputValueView.generateValue());
-        }
-        return result;
     }
 }

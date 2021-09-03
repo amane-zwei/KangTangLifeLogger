@@ -1,7 +1,6 @@
 package com.hoge.amazarashi.kangtanglifelogger.fragments;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,19 +8,15 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
-import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
-import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
-import com.hoge.amazarashi.kangtanglifelogger.repositories.strorages.BackupRepository;
+import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService;
 import com.hoge.amazarashi.kangtanglifelogger.views.InputView;
-
-import java.io.File;
 
 import javax.inject.Inject;
 
 public class InputFragment extends Fragment {
 
     @Inject
-    KTLLEventRepository repository;
+    RegisterEventService registerEventService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +34,7 @@ public class InputFragment extends Fragment {
         return inputView;
     }
 
-    private void onSave(KTLLEvent event) {
-        repository.insert(event);
+    private void onSave(RegisterEventService.EventRecord action) {
+        registerEventService.register(action);
     }
 }

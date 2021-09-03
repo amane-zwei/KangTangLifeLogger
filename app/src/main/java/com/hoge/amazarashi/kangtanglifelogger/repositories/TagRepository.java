@@ -2,17 +2,21 @@ package com.hoge.amazarashi.kangtanglifelogger.repositories;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.dao.TagDao;
-import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 public class TagRepository {
 
     private final TagDao dao;
 
+    ExecutorService executorService;
+
     public TagRepository(KTLLApplication application, TagDao dao) {
         this.dao = dao;
+        this.executorService = application.getExecutorService();
     }
 
     public void insert(Tag element, Runnable runnable) {
@@ -23,6 +27,17 @@ public class TagRepository {
         Executor.IOThread(() -> {
             element.setId(dao.insert(element));
             runnable.run();
+        });
+    }
+
+    public Future<Tag> findOrCreate(String tagName, TagListener listener) {
+        return executorService.submit(() -> {
+            Tag tag = dao.find(tagName);
+            if (tag == null) {
+                tag = new Tag(tagName);
+            }
+            listener.onLoaded(tag);
+            return tag;
         });
     }
 
@@ -37,6 +52,10 @@ public class TagRepository {
     public void replace(List<Tag> tags) {
         dao.deleteAll();
         dao.insert(tags);
+    }
+
+    public interface TagListener {
+        void onLoaded(Tag tag);
     }
 
     public interface TagListListener {

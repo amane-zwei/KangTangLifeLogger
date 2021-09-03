@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@Entity(tableName = "value")
-public class Value {
+@Entity(tableName = "synonym")
+public class Synonym {
+    public Synonym(String name, Tag tag) {
+        this.name = name;
+        this.tag = tag;
+    }
 
-    public Value applyId() {
-        actionId = action.getId();
+    public Synonym applyId() {
         if (tag != null) {
             tagId = tag.getId();
-        }
-        if (item != null) {
-            itemId = item.getId();
         }
         return this;
     }
@@ -31,45 +31,18 @@ public class Value {
     @Setter
     private long id;
 
-    @ColumnInfo(name = "action_id")
-    @Getter
-    @Setter
-    private long actionId;
-
     @ColumnInfo(name = "tag_id")
     @Getter
     @Setter
     private long tagId;
 
-    @ColumnInfo(name = "item_id")
-    @Getter
-    @Setter
-    private long itemId;
-
-    @ColumnInfo(name = "input_value")
-    @Getter
-    @Setter
-    private String inputValue;
-
     @ColumnInfo(name = "value")
     @Getter
     @Setter
-    private String value;
+    private String name;
 
     @Ignore
     @JsonIgnore
     @Getter
-    @Setter
-    private KTLLAction action;
-
-    @Ignore
-    @JsonIgnore
-    @Getter
-    @Setter
     private Tag tag;
-
-    @Ignore
-    @JsonIgnore
-    @Getter
-    private Item item;
 }

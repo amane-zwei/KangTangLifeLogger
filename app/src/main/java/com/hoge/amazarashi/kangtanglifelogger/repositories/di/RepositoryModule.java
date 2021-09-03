@@ -51,7 +51,6 @@ public class RepositoryModule {
         return new ItemRepository(application, database.itemDao());
     }
 
-
     @Singleton
     @Provides
     public BackupRepository provideBackupRepository() {

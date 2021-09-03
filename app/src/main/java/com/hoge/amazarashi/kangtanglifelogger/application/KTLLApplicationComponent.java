@@ -11,6 +11,10 @@ import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.ItemRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.di.RepositoryModule;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.strorages.BackupRepository;
+import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService;
+import com.hoge.amazarashi.kangtanglifelogger.service.di.ServiceModule;
+
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Singleton;
 
@@ -19,11 +23,14 @@ import dagger.Component;
 @Singleton
 @Component(modules = {
         KTLLDatabaseModule.class,
-        RepositoryModule.class})
+        RepositoryModule.class,
+        ServiceModule.class})
 public interface KTLLApplicationComponent {
     void inject(InputFragment inputFragment);
     void inject(ExportDialog exportDialog);
     void inject(TagList tagList);
+
+    void inject(RegisterEventService service);
 
     void inject(KTLLEventRepository repository);
     void inject(KTLLActionRepository repository);

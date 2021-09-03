@@ -26,6 +26,11 @@ public class KTLLEvent {
         children.add(action);
     }
 
+    public void reAdd(KTLLAction action) {
+        this.children.clear();
+        add(action);
+    }
+
     @PrimaryKey(autoGenerate = true)
     @Getter
     @Setter

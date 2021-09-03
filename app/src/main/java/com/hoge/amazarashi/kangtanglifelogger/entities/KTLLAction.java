@@ -34,6 +34,13 @@ public class KTLLAction {
         children.add(value);
     }
 
+    public void reAdd(List<Value> values) {
+        children.clear();
+        for (Value value : values) {
+            add(value);
+        }
+    }
+
     @PrimaryKey(autoGenerate = true)
     @Getter
     @Setter

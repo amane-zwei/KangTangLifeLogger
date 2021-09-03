@@ -6,7 +6,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.DrawableRes;
@@ -17,8 +16,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hoge.amazarashi.kangtanglifelogger.R;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
-import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
 import com.hoge.amazarashi.kangtanglifelogger.fragments.dialogs.ExportDialog;
+import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService.EventRecord;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
 
 public class InputView extends CoordinatorLayout {
@@ -126,17 +125,15 @@ public class InputView extends CoordinatorLayout {
         button.setOnClickListener((View view) -> listener.onSave(generateEvent()));
     }
 
-    private KTLLEvent generateEvent() {
-        KTLLEvent event = new KTLLEvent();
-        KTLLAction action = new KTLLAction(periodView.getFrom().get());
-        event.add(action);
-        for (Value value : scrollValuesView.generateValues()) {
-            action.add(value);
-        }
-        return event;
+    private EventRecord generateEvent() {
+        return new EventRecord(
+                new KTLLEvent(),
+                new KTLLAction(periodView.getFrom().get()),
+                scrollValuesView.getValues()
+        );
     }
 
     public interface OnSaveListener {
-        void onSave(KTLLEvent event);
+        void onSave(EventRecord event);
     }
 }
