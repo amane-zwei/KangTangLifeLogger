@@ -20,9 +20,6 @@ public class Value {
         if (tag != null) {
             tagId = tag.getId();
         }
-        if (item != null) {
-            itemId = item.getId();
-        }
         return this;
     }
 
@@ -67,9 +64,4 @@ public class Value {
     @Getter
     @Setter
     private Tag tag;
-
-    @Ignore
-    @JsonIgnore
-    @Getter
-    private Item item;
 }

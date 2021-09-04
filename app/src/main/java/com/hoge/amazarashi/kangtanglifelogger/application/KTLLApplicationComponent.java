@@ -8,13 +8,10 @@ import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.ValueRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLActionRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
-import com.hoge.amazarashi.kangtanglifelogger.repositories.ItemRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.di.RepositoryModule;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.strorages.BackupRepository;
 import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService;
 import com.hoge.amazarashi.kangtanglifelogger.service.di.ServiceModule;
-
-import java.util.concurrent.ExecutorService;
 
 import javax.inject.Singleton;
 
@@ -36,7 +33,6 @@ public interface KTLLApplicationComponent {
     void inject(KTLLActionRepository repository);
     void inject(ValueRepository repository);
     void inject(TagRepository repository);
-    void inject(ItemRepository repository);
 
     void inject(BackupRepository repository);
 }

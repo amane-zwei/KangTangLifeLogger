@@ -3,7 +3,6 @@ package com.hoge.amazarashi.kangtanglifelogger.repositories;
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.dao.KTLLActionDao;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
-import com.hoge.amazarashi.kangtanglifelogger.entities.Item;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 
 import java.util.List;
