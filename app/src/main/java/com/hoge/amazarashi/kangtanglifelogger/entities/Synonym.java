@@ -36,7 +36,7 @@ public class Synonym {
     @Setter
     private long tagId;
 
-    @ColumnInfo(name = "value")
+    @ColumnInfo(name = "name")
     @Getter
     @Setter
     private String name;

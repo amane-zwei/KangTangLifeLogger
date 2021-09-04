@@ -9,10 +9,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
+import com.hoge.amazarashi.kangtanglifelogger.entities.Synonym;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLActionRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLEventRepository;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.SynonymRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.ValueRepository;
 
@@ -33,6 +35,7 @@ public class BackupRepository {
     private static final String eventFileName = "event.json";
     private static final String tagFileName = "tag.json";
     private static final String valueFileName = "value.json";
+    private static final String synonymFileName = "synonym.json";
 
     @Inject
     KTLLActionRepository ktllActionRepository;
@@ -42,6 +45,8 @@ public class BackupRepository {
     TagRepository tagRepository;
     @Inject
     ValueRepository valueRepository;
+    @Inject
+    SynonymRepository synonymRepository;
 
     public BackupRepository(KTLLApplication application) {
         application.getApplicationComponent().inject(this);
@@ -68,6 +73,7 @@ public class BackupRepository {
                 putFile(zipOutputStream, eventFileName, objectMapper.writeValueAsBytes(ktllEventRepository.listAll()));
                 putFile(zipOutputStream, tagFileName, objectMapper.writeValueAsBytes(tagRepository.listAll()));
                 putFile(zipOutputStream, valueFileName, objectMapper.writeValueAsBytes(valueRepository.listAll()));
+                putFile(zipOutputStream, synonymFileName, objectMapper.writeValueAsBytes(synonymRepository.listAll()));
 
                 zipOutputStream.close();
                 outputStream.close();
@@ -104,6 +110,8 @@ public class BackupRepository {
                         tagRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, Tag[].class)));
                     } else if (valueFileName.equals(fileName)) {
                         valueRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, Value[].class)));
+                    } else if (synonymFileName.equals(fileName)) {
+                        synonymRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, Synonym[].class)));
                     }
                     zipInputStream.closeEntry();
                 }

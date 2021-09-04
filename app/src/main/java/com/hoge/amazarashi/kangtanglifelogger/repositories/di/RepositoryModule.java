@@ -2,6 +2,7 @@ package com.hoge.amazarashi.kangtanglifelogger.repositories.di;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.database.KTLLDatabase;
+import com.hoge.amazarashi.kangtanglifelogger.repositories.SynonymRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.TagRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.ValueRepository;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.KTLLActionRepository;
@@ -42,6 +43,12 @@ public class RepositoryModule {
     @Provides
     public TagRepository provideTagRepository(KTLLDatabase database) {
         return new TagRepository(application, database.tagDao());
+    }
+
+    @Singleton
+    @Provides
+    public SynonymRepository provideSynonymRepository(KTLLDatabase database) {
+        return new SynonymRepository(application, database.SynonymDao());
     }
 
     @Singleton
