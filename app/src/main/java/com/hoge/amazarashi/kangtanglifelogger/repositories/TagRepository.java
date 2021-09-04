@@ -30,11 +30,19 @@ public class TagRepository {
         });
     }
 
-    public Future<Tag> findOrCreate(String tagName, TagListener listener) {
+    public Future<Tag> find(String tagName, TagListener listener) {
         return executorService.submit(() -> {
             Tag tag = dao.find(tagName);
+            listener.onLoaded(tag);
+            return tag;
+        });
+    }
+
+    public Future<Tag> findBySynonymNameOrCreate(String name, TagListener listener) {
+        return executorService.submit(() -> {
+            Tag tag = dao.findBySynonymName(name);
             if (tag == null) {
-                tag = new Tag(tagName);
+                tag = new Tag(name);
             }
             listener.onLoaded(tag);
             return tag;

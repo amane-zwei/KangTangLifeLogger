@@ -46,11 +46,11 @@ public class TagList {
                 return;
             }
         }
-        valueRecord.setTagFuture(tagRepository.findOrCreate(tagName, (tag) -> {
-            if (tag == null) {
-                valueRecord.setTag(null);
-            } else {
+        valueRecord.setTagFuture(tagRepository.find(tagName, (tag) -> {
+            if (tag != null) {
                 valueRecord.setTag(tag);
+            } else {
+                valueRecord.setTagFuture(tagRepository.findBySynonymNameOrCreate(tagName, valueRecord::setTag));
             }
         }));
     }
