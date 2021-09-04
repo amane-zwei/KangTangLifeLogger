@@ -6,6 +6,7 @@ import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
@@ -13,16 +14,19 @@ public class KTLLEventRepository {
 
     private final KTLLEventDao dao;
 
+    private final ExecutorService executorService;
+
     @Inject
     KTLLActionRepository actionRepository;
 
     public KTLLEventRepository(KTLLApplication application, KTLLEventDao dao) {
         this.dao = dao;
+        this.executorService = application.getExecutorService();
         application.getApplicationComponent().inject(this);
     }
 
     public void insert(KTLLEvent element) {
-        Executor.IOThread(() -> {
+        executorService.submit(() -> {
             element.setId(dao.insert(element));
 
             for (KTLLAction action : element.getChildren()) {

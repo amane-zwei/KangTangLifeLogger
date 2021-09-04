@@ -24,7 +24,7 @@ public class TagRepository {
             runnable.run();
             return;
         }
-        Executor.IOThread(() -> {
+        executorService.submit(() -> {
             element.setId(dao.insert(element));
             runnable.run();
         });
@@ -50,7 +50,7 @@ public class TagRepository {
     }
 
     public void list(TagListListener listener) {
-        Executor.IOThread(() -> listener.onLoaded(dao.list()));
+        executorService.submit(() -> listener.onLoaded(dao.list()));
     }
 
     public List<Tag> listAll() {
