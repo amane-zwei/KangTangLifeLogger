@@ -1,5 +1,7 @@
 package com.hoge.amazarashi.kangtanglifelogger.service;
 
+import android.os.Handler;
+
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
@@ -23,15 +25,18 @@ public class RegisterEventService {
 
     private final ExecutorService executorService;
 
+    private final Handler handler;
+
     @Inject
     KTLLEventRepository eventRepository;
 
     public RegisterEventService(KTLLApplication application) {
         this.executorService = application.getExecutorService();
+        this.handler = application.getMainThreadHandler();
         application.getApplicationComponent().inject(this);
     }
 
-    public void register(final EventRecord event) {
+    public void register(final EventRecord event, Runnable onComplete) {
         executorService.submit(() -> {
             for (ValueRecord record : event.values) {
                 try {
@@ -41,7 +46,12 @@ public class RegisterEventService {
                 } catch (ExecutionException | InterruptedException ignored) {
                 }
             }
-            eventRepository.insert(buildEvent(event));
+            try {
+                eventRepository.insert(buildEvent(event)).get();
+            } catch (ExecutionException | InterruptedException ignored) {
+            }
+
+            handler.post(onComplete);
         });
     }
 

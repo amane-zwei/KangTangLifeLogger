@@ -6,6 +6,7 @@ import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -24,11 +25,16 @@ public class ValueRepository {
         application.getApplicationComponent().inject(this);
     }
 
-    public void insert(Value element) {
-        tagRepository.insert(
-                element.getTag(),
-                () -> executorService.submit(
-                        () -> dao.insert(element.applyId())));
+    public Future<Value> insert(Value element) throws Exception {
+        if (element == null || element.getId() != 0) {
+            return executorService.submit(() -> element);
+        }
+
+        tagRepository.insert(element.getTag()).get();
+        return executorService.submit(() -> {
+            dao.insert(element.applyId());
+            return element;
+        });
     }
 
     public List<Value> listAll() {

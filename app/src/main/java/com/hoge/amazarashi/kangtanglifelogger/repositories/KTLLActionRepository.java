@@ -5,8 +5,10 @@ import com.hoge.amazarashi.kangtanglifelogger.dao.KTLLActionDao;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -25,13 +27,23 @@ public class KTLLActionRepository {
         application.getApplicationComponent().inject(this);
     }
 
-    public void insert(KTLLAction element) {
-        executorService.submit(() -> {
+    public Future<KTLLAction> insert(KTLLAction element) {
+        if (element == null || element.getId() != 0) {
+            return executorService.submit(() -> element);
+        }
+
+        return executorService.submit(() -> {
             element.setId(dao.insert(element));
 
-            for (Value value : element.getChildren()) {
-                valueRepository.insert(value);
+            List<Value> children = element.getChildren();
+            List<Future<Value>> futures = new ArrayList<>(children.size());
+            for (Value value : children) {
+                futures.add(valueRepository.insert(value));
             }
+            for (Future<Value> value : futures) {
+                value.get();
+            }
+            return element;
         });
     }
 

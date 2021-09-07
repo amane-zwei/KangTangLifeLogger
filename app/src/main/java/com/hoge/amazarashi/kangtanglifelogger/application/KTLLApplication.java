@@ -1,6 +1,10 @@
 package com.hoge.amazarashi.kangtanglifelogger.application;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.core.os.HandlerCompat;
 
 import com.hoge.amazarashi.kangtanglifelogger.database.KTLLDatabaseModule;
 import com.hoge.amazarashi.kangtanglifelogger.domain.TagList;
@@ -23,11 +27,15 @@ public class KTLLApplication extends Application {
     @Getter
     private ExecutorService executorService;
 
+    @Getter
+    private Handler mainThreadHandler;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         executorService = Executors.newCachedThreadPool();
+        mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
         applicationComponent = DaggerKTLLApplicationComponent
                 .builder()

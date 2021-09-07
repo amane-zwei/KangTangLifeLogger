@@ -19,14 +19,13 @@ public class TagRepository {
         this.executorService = application.getExecutorService();
     }
 
-    public void insert(Tag element, Runnable runnable) {
+    public Future<Tag> insert(Tag element) {
         if (element == null || element.getId() != 0) {
-            runnable.run();
-            return;
+            return executorService.submit(() -> element);
         }
-        executorService.submit(() -> {
+        return executorService.submit(() -> {
             element.setId(dao.insert(element));
-            runnable.run();
+            return element;
         });
     }
 
