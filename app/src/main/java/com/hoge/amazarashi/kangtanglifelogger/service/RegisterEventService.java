@@ -65,6 +65,9 @@ public class RegisterEventService {
     private static List<Value> buildValues(KTLLAction action, List<ValueRecord> src) {
         List<Value> result = new ArrayList<>();
         for (ValueRecord record : src) {
+            if (!record.isValid()) {
+                continue;
+            }
             Value value = record.value;
             value.setAction(action);
             value.setTag(record.tag);
@@ -98,5 +101,10 @@ public class RegisterEventService {
         @Getter
         @Setter
         private Future<Tag> tagFuture;
+
+        private boolean isValid() {
+            return tag != null
+                    || (value.getInputValue() != null && value.getInputValue().length() > 0);
+        }
     }
 }
