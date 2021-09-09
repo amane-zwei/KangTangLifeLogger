@@ -3,11 +3,10 @@ package com.hoge.amazarashi.kangtanglifelogger;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.hoge.amazarashi.kangtanglifelogger.fragments.InputFragment;
 
@@ -17,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
         int viewId = View.generateViewId();
         FrameLayout layout = new FrameLayout(this);
         layout.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -24,12 +25,13 @@ public class MainActivity extends AppCompatActivity {
         this.setContentView(layout);
 
         if (savedInstanceState == null) {
-            FragmentManager manager = getSupportFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction();
+            InputFragment inputFragment = new InputFragment();
+            inputFragment.setTargetView(layout);
 
-            transaction.add(layout.getId(), new InputFragment());
-
-            transaction.commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(layout.getId(), inputFragment)
+                    .commit();
         }
     }
 }
