@@ -47,33 +47,12 @@ public class RegisterEventService {
                 }
             }
             try {
-                eventRepository.insert(buildEvent(event)).get();
+                eventRepository.insert(event.build()).get();
             } catch (ExecutionException | InterruptedException ignored) {
             }
 
             handler.post(onComplete);
         });
-    }
-
-    private static KTLLEvent buildEvent(EventRecord src) {
-        KTLLEvent result = src.event;
-        src.action.reAdd(buildValues(src.action, src.values));
-        result.reAdd(src.action);
-        return result;
-    }
-
-    private static List<Value> buildValues(KTLLAction action, List<ValueRecord> src) {
-        List<Value> result = new ArrayList<>();
-        for (ValueRecord record : src) {
-            if (!record.isValid()) {
-                continue;
-            }
-            Value value = record.value;
-            value.setAction(action);
-            value.setTag(record.tag);
-            result.add(value);
-        }
-        return result;
     }
 
     @AllArgsConstructor
@@ -85,6 +64,27 @@ public class RegisterEventService {
 
         @Getter
         private final List<ValueRecord> values;
+
+        private KTLLEvent build() {
+            KTLLEvent result = this.event;
+            this.action.reAdd(buildValues(this.action, this.values));
+            result.reAdd(this.action);
+            return result;
+        }
+
+        private static List<Value> buildValues(KTLLAction action, List<ValueRecord> src) {
+            List<Value> result = new ArrayList<>();
+            for (ValueRecord record : src) {
+                if (!record.isValid()) {
+                    continue;
+                }
+                Value value = record.value;
+                value.setAction(action);
+                value.setTag(record.tag);
+                result.add(value);
+            }
+            return result;
+        }
     }
 
     public static class ValueRecord {
