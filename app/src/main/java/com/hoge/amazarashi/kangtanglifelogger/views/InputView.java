@@ -91,6 +91,7 @@ public class InputView extends CoordinatorLayout {
         }
         {
             scrollValuesView = new ScrollValuesView(context);
+            scrollValuesView.addLocation();
             scrollValuesView.add();
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,

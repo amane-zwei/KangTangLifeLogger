@@ -6,6 +6,7 @@ import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
 
+import com.hoge.amazarashi.kangtanglifelogger.client.LocationClient;
 import com.hoge.amazarashi.kangtanglifelogger.database.KTLLDatabaseModule;
 import com.hoge.amazarashi.kangtanglifelogger.domain.TagList;
 import com.hoge.amazarashi.kangtanglifelogger.repositories.di.RepositoryModule;
@@ -28,6 +29,9 @@ public class KTLLApplication extends Application {
     private ExecutorService executorService;
 
     @Getter
+    private LocationClient locationClient;
+
+    @Getter
     private Handler mainThreadHandler;
 
     @Override
@@ -35,6 +39,7 @@ public class KTLLApplication extends Application {
         super.onCreate();
 
         executorService = Executors.newCachedThreadPool();
+        locationClient = new LocationClient(this);
         mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
         applicationComponent = DaggerKTLLApplicationComponent

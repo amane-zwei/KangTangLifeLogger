@@ -90,6 +90,11 @@ public class InputValueView extends LinearLayout {
         return this;
     }
 
+    public void applyValueRecord() {
+        tagNameView.applyValueRecord();
+        valueView.applyValueRecord();
+    }
+
     private class TagNameView extends LinearLayout {
         private final KTLLEditText tagName;
 
@@ -166,6 +171,7 @@ public class InputValueView extends LinearLayout {
         }
 
         public void applyValueRecord() {
+            setText(valueRecord.getValue().getValue());
         }
 
         public String getValue() {

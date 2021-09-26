@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService.ValueRecord;
 
 import java.util.ArrayList;
@@ -24,14 +25,17 @@ public class ScrollValuesView extends ScrollView {
         {
             LinearLayout layout = this.layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.VERTICAL);
-            layout.setPadding(0,0,0,80);
+            layout.setPadding(0, 0, 0, 80);
             addView(layout);
         }
         values = new ArrayList<>();
     }
 
-    public void add() {
-        final ValueRecord valueRecord = new ValueRecord();
+    public InputValueView add() {
+        return add(new ValueRecord());
+    }
+
+    public InputValueView add(ValueRecord valueRecord) {
         values.add(valueRecord);
 
         final InputValueView inputValueView = new InputValueView(getContext());
@@ -47,5 +51,25 @@ public class ScrollValuesView extends ScrollView {
         inputValueView.setLayoutParams(layoutParams);
         layout.addView(inputValueView);
         invalidate();
+
+        return inputValueView;
+    }
+
+    public InputValueView addLocation() {
+        ValueRecord locationValueRecord = new ValueRecord();
+        InputValueView result = add(locationValueRecord);
+
+        ((KTLLApplication) getContext().getApplicationContext())
+                .getTagList()
+                .findOrGenerate("location", locationValueRecord, () -> {});
+
+        ((KTLLApplication) getContext().getApplicationContext())
+                .getLocationClient()
+                .getLastLocation(getContext(), location -> {
+                    locationValueRecord.getValue().setValue(location.toString());
+                    result.applyValueRecord();
+                });
+
+        return result;
     }
 }
