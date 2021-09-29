@@ -91,8 +91,6 @@ public class InputView extends CoordinatorLayout {
         }
         {
             scrollValuesView = new ScrollValuesView(context);
-            scrollValuesView.addLocation();
-            scrollValuesView.add();
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     0,
@@ -124,6 +122,17 @@ public class InputView extends CoordinatorLayout {
 
     public void setOnSaveListener(OnSaveListener listener) {
         button.setOnClickListener((View view) -> listener.onSave(generateEvent()));
+    }
+
+    public InputValueView add() {
+        return scrollValuesView.add();
+    }
+
+    @androidx.annotation.RequiresPermission(anyOf = {
+            "android.permission.ACCESS_COARSE_LOCATION",
+            "android.permission.ACCESS_FINE_LOCATION"})
+    public InputValueView addLocation() {
+        return scrollValuesView.addLocation();
     }
 
     private EventRecord generateEvent() {
