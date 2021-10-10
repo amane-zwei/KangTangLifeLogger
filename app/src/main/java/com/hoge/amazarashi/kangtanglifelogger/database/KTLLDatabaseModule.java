@@ -13,6 +13,7 @@ import dagger.Provides;
 public class KTLLDatabaseModule {
 
     private static final String dbName = "ktll-database";
+    private static final String initialData = "initial-data/" + dbName + ".db";
 
     private final Context context;
 
@@ -24,6 +25,7 @@ public class KTLLDatabaseModule {
     @Provides
     public KTLLDatabase provideDatabase() {
         return Room.databaseBuilder(context, KTLLDatabase.class, dbName)
+                .createFromAsset(initialData)
                 .fallbackToDestructiveMigration()
                 .build();
     }

@@ -100,18 +100,24 @@ public class BackupRepository {
                 // get project data
                 ZipEntry zipEntry;
                 while ((zipEntry = zipInputStream.getNextEntry()) != null) {
-                    String fileName = zipEntry.getName();
+                    String fileName = removeDirectory(zipEntry.getName());
 
-                    if (actionFileName.equals(fileName)) {
-                        ktllActionRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, KTLLAction[].class)));
-                    } else if (eventFileName.equals(fileName)) {
-                        ktllEventRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, KTLLEvent[].class)));
-                    } else if (tagFileName.equals(fileName)) {
-                        tagRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, Tag[].class)));
-                    } else if (valueFileName.equals(fileName)) {
-                        valueRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, Value[].class)));
-                    } else if (synonymFileName.equals(fileName)) {
-                        synonymRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, Synonym[].class)));
+                    switch (fileName) {
+                        case actionFileName:
+                            ktllActionRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, KTLLAction[].class)));
+                            break;
+                        case eventFileName:
+                            ktllEventRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, KTLLEvent[].class)));
+                            break;
+                        case tagFileName:
+                            tagRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, Tag[].class)));
+                            break;
+                        case valueFileName:
+                            valueRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, Value[].class)));
+                            break;
+                        case synonymFileName:
+                            synonymRepository.replace(Arrays.asList(objectMapper.readValue(zipInputStream, Synonym[].class)));
+                            break;
                     }
                     zipInputStream.closeEntry();
                 }
@@ -121,5 +127,10 @@ public class BackupRepository {
                 android.util.Log.d("hoge", "error");
             }
         });
+    }
+
+    private String removeDirectory(String src) {
+        int index = src.lastIndexOf('/');
+        return index < 0 ? src : src.substring(index + 1);
     }
 }
