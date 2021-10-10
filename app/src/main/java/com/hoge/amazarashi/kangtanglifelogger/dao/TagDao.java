@@ -19,7 +19,7 @@ public interface TagDao {
     @Query("select * from tag where name = :name")
     Tag find(String name);
 
-    @Query("select * from tag "
+    @Query("select tag.* from tag "
             + "inner join synonym on tag.id = synonym.tag_id "
             + "where synonym.name = :name")
     Tag findBySynonymName(String name);

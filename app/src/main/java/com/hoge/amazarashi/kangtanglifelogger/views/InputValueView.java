@@ -113,7 +113,6 @@ public class InputValueView extends LinearLayout {
                 ));
                 addView(label);
             }
-
             {
                 KTLLEditText tagName = this.tagName = new KTLLEditText(context);
                 tagName.setTextColor(KTLLTheme.textColor);
@@ -140,7 +139,7 @@ public class InputValueView extends LinearLayout {
                     .findOrGenerate(tagName, valueRecord, this::applyValueRecord);
         }
 
-        public void applyValueRecord() {
+        private void applyValueRecord() {
             Tag tag = valueRecord.getTag();
             if (tag != null) {
                 tagName.setText(tag.getName());
