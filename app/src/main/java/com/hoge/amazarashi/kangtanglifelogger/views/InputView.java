@@ -19,6 +19,7 @@ import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
 import com.hoge.amazarashi.kangtanglifelogger.fragments.dialogs.ExportDialog;
 import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService.EventRecord;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
+import com.hoge.amazarashi.kangtanglifelogger.viewmodel.EventViewModel;
 
 public class InputView extends CoordinatorLayout {
 
@@ -124,6 +125,10 @@ public class InputView extends CoordinatorLayout {
         button.setOnClickListener((View view) -> listener.onSave(generateEvent()));
     }
 
+    public void setValueProvider(ScrollValuesView.ValueProvider provider) {
+        scrollValuesView.setValueProvider(provider);
+    }
+
     public InputValueView add() {
         return scrollValuesView.add();
     }
@@ -136,11 +141,12 @@ public class InputView extends CoordinatorLayout {
     }
 
     private EventRecord generateEvent() {
-        return new EventRecord(
-                new KTLLEvent(),
-                new KTLLAction(periodView.getFrom().get()),
-                scrollValuesView.getValues()
-        );
+        return null;
+//        return new EventRecord(
+//                new KTLLEvent(),
+//                new KTLLAction(periodView.getFrom().get()),
+//                scrollValuesView.getValues()
+//        );
     }
 
     public interface OnSaveListener {

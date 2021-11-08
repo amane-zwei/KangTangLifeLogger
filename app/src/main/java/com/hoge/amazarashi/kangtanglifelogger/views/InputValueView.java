@@ -16,14 +16,19 @@ import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
 import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService.ValueRecord;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
+import com.hoge.amazarashi.kangtanglifelogger.viewmodel.EventViewModel;
+
+import lombok.Getter;
 
 public class InputValueView extends LinearLayout {
 
+    @Getter
     private final TagNameView tagNameView;
+    @Getter
     private final ValueView valueView;
     private final Button deleteButton;
 
-    private ValueRecord valueRecord;
+    private EventViewModel.ValueViewModel valueViewModel;
 
     public InputValueView(Context context) {
         super(context);
@@ -84,18 +89,12 @@ public class InputValueView extends LinearLayout {
         deleteButton.setOnClickListener(listener);
     }
 
-    public InputValueView setValueRecord(ValueRecord valueRecord) {
-        this.valueRecord = valueRecord;
-        this.tagNameView.applyValueRecord();
+    public InputValueView setValueRecord(EventViewModel.ValueViewModel valueViewModel) {
+        this.valueViewModel = valueViewModel;
         return this;
     }
 
-    public void applyValueRecord() {
-        tagNameView.applyValueRecord();
-        valueView.applyValueRecord();
-    }
-
-    private class TagNameView extends LinearLayout {
+    public class TagNameView extends LinearLayout {
         private final KTLLEditText tagName;
 
         public TagNameView(Context context) {
@@ -136,23 +135,26 @@ public class InputValueView extends LinearLayout {
         private void findOrGenerateTag(String tagName) {
             ((KTLLApplication) getContext().getApplicationContext())
                     .getTagList()
-                    .findOrGenerate(tagName, valueRecord, this::applyValueRecord);
+                    .findOrGenerate(tagName, valueViewModel.tag::postValue);
         }
 
-        private void applyValueRecord() {
-            Tag tag = valueRecord.getTag();
+        private void applyValueRecord(Tag tag) {
+            valueViewModel.tag.setValue(tag);
             if (tag != null) {
                 tagName.setText(tag.getName());
             }
         }
 
+        public void setTagName(String name) {
+            tagName.setText(name);
+        }
         public String getName() {
             String name = tagName.getText().toString();
             return name == null ? null : name.trim();
         }
     }
 
-    private class ValueView extends KTLLEditText {
+    public class ValueView extends KTLLEditText {
 
         public ValueView(Context context) {
             super(context);
@@ -163,14 +165,15 @@ public class InputValueView extends LinearLayout {
         private void onFocusChange(View view, boolean hasFocus) {
             if (!hasFocus) {
                 String valueString = getValue();
-                Value value = valueRecord.getValue();
+                Value value = new Value();
                 value.setInputValue(valueString);
                 value.setValue(valueString);
+                valueViewModel.value.setValue(value);
             }
         }
 
-        public void applyValueRecord() {
-            setText(valueRecord.getValue().getValue());
+        public void setValue(String value) {
+            setText(value);
         }
 
         public String getValue() {

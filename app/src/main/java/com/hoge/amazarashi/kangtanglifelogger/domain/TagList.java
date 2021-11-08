@@ -29,30 +29,38 @@ public class TagList {
         tagRepository.list(list::addAll);
     }
 
-    public void findOrGenerate(final String tagName, final ValueRecord valueRecord, final Runnable callback) {
-        Future<?> future = valueRecord.getTagFuture();
-        if (future !=null && !future.isDone()) {
-            future.cancel(true);
-        }
+    public void findOrGenerate(final String tagName, Consumer consumer) {
+//        Future<?> future = valueRecord.getTagFuture();
+//        if (future !=null && !future.isDone()) {
+//            future.cancel(true);
+//        }
 
         if (tagName == null || tagName.length() < 1) {
-            valueRecord.setTag(null);
+            consumer.accept(null);
             return;
         }
         {
             Tag tag = find(tagName);
             if (tag != null) {
-                valueRecord.setTag(tag);
+                consumer.accept(tag);
                 return;
             }
         }
-        valueRecord.setTagFuture(tagRepository.find(tagName, (tag) -> {
+//        valueRecord.setTagFuture(tagRepository.find(tagName, (tag) -> {
+//            if (tag != null) {
+//                valueRecord.setTag(tag);
+//            } else {
+//                valueRecord.setTagFuture(tagRepository.findBySynonymNameOrCreate(tagName, valueRecord::setTag));
+//            }
+//        }));
+        tagRepository.find(tagName, (tag) -> {
             if (tag != null) {
-                valueRecord.setTag(tag);
+                consumer.accept(tag);
             } else {
-                valueRecord.setTagFuture(tagRepository.findBySynonymNameOrCreate(tagName, valueRecord::setTag));
+                tagRepository.findBySynonymNameOrCreate(tagName, consumer::accept);
             }
-        }));
+        });
+
     }
 
     private Tag find(String name) {

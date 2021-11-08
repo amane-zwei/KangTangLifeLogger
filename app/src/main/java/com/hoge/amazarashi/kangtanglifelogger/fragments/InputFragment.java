@@ -11,13 +11,15 @@ import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService;
+import com.hoge.amazarashi.kangtanglifelogger.viewmodel.EventViewModel;
+import com.hoge.amazarashi.kangtanglifelogger.views.InputValueView;
 import com.hoge.amazarashi.kangtanglifelogger.views.InputView;
 
 import java.util.Map;
@@ -34,6 +36,8 @@ public class InputFragment extends Fragment {
     @Setter
     private View targetView;
 
+    private EventViewModel eventViewModel;
+
     private ActivityResultLauncher<String[]> requestLocationPermissionLauncher;
 
     @Override
@@ -48,6 +52,8 @@ public class InputFragment extends Fragment {
         }
         KTLLApplication application = (KTLLApplication) context.getApplicationContext();
         application.getApplicationComponent().inject(this);
+
+        eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
     }
 
     @Override
@@ -56,6 +62,7 @@ public class InputFragment extends Fragment {
 
         InputView inputView = new InputView(context);
         inputView.setOnSaveListener(this::onSave);
+        inputView.setValueProvider(this::createValue);
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -69,6 +76,22 @@ public class InputFragment extends Fragment {
         }
 
         return inputView;
+    }
+
+    public EventViewModel.ValueViewModel createValue(InputValueView valueView) {
+        EventViewModel.ValueViewModel result = new EventViewModel.ValueViewModel();
+        result.tag.observe(this, tag -> {
+                    valueView.getTagNameView().setTagName(tag.getName());
+                    valueView.getTagNameView().invalidate();
+                }
+        );
+        result.value.observe(this, value -> {
+                    valueView.getValueView().setValue(value.getInputValue());
+                    valueView.getValueView().invalidate();
+                }
+        );
+        eventViewModel.getValues().add(result);
+        return result;
     }
 
     @SuppressLint("MissingPermission")
@@ -99,7 +122,7 @@ public class InputFragment extends Fragment {
 
 
     private void onSave(RegisterEventService.EventRecord action) {
-        registerEventService.register(action, this::onComplete);
+        //registerEventService.register(action, this::onComplete);
         next();
     }
 

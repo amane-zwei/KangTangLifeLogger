@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         layout.setId(viewId);
         this.setContentView(layout);
 
-        if (savedInstanceState == null) {
+        if (true || savedInstanceState == null) {
             InputFragment inputFragment = new InputFragment();
             inputFragment.setTargetView(layout);
 

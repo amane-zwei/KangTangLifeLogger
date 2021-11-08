@@ -1,5 +1,8 @@
 package com.hoge.amazarashi.kangtanglifelogger.entities;
 
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -13,7 +16,7 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @Entity(tableName = "value")
-public class Value {
+public class Value extends BaseObservable {
 
     public Value applyId() {
         actionId = action.getId();
@@ -43,10 +46,16 @@ public class Value {
     @Setter
     private long itemId;
 
+    @Bindable
     @ColumnInfo(name = "input_value")
     @Getter
-    @Setter
     private String inputValue;
+
+    public void setInputValue(String inputValue) {
+        this.inputValue = inputValue;
+        this.value = inputValue;
+        notifyPropertyChanged(BR.inputValue);
+    }
 
     @ColumnInfo(name = "value")
     @Getter
