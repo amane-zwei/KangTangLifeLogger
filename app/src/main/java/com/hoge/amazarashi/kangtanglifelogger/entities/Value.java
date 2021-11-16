@@ -73,4 +73,8 @@ public class Value extends BaseObservable {
     @Getter
     @Setter
     private Tag tag;
+
+    public boolean equals(Value value) {
+        return value != null && this.inputValue != null && this.inputValue.equals(value.inputValue);
+    }
 }

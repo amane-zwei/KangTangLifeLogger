@@ -42,5 +42,25 @@ public class EventViewModel extends ViewModel {
             tag.setValue(new Tag());
             value.setValue(new Value());
         }
+
+        public void putTag(Tag tag) {
+            if (this.tag.getValue() != tag) {
+                this.tag.postValue(tag);
+            }
+        }
+
+        public void putValue(Value value) {
+            Value myValue = this.value.getValue();
+            if (myValue == null) {
+                if (value == null) {
+                    return;
+                }
+            } else {
+                if (myValue.equals(value)) {
+                    return;
+                }
+            }
+            this.value.postValue(value);
+        }
     }
 }

@@ -19,9 +19,6 @@ public class ScrollValuesView extends ScrollView {
 
     private final LinearLayout layout;
 
-    @Setter
-    private ValueProvider valueProvider = null;
-
     public ScrollValuesView(Context context) {
         super(context);
 
@@ -37,13 +34,6 @@ public class ScrollValuesView extends ScrollView {
 
         final InputValueView inputValueView = new InputValueView(getContext());
 
-        EventViewModel.ValueViewModel valueViewModel = valueProvider.get(inputValueView);
-
-        inputValueView.setValueRecord(valueViewModel);
-//        inputValueView.setOnClickDelete((view) -> {
-//            values.remove(valueRecord);
-//            layout.removeView(inputValueView);
-//        });
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -22,6 +23,7 @@ import com.hoge.amazarashi.kangtanglifelogger.viewmodel.EventViewModel;
 import com.hoge.amazarashi.kangtanglifelogger.views.InputValueView;
 import com.hoge.amazarashi.kangtanglifelogger.views.InputView;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -57,55 +59,73 @@ public class InputFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Context context = inflater.getContext();
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return new InputView(getContext());
+    }
 
-        InputView inputView = new InputView(context);
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle bundle){
+        Context context = getContext();
+        InputView inputView = (InputView) view;
         inputView.setOnSaveListener(this::onSave);
         inputView.setValueProvider(this::createValue);
 
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestLocationPermissionLauncher.launch(
-                    new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                    });
-        } else {
-            initLocation(inputView);
+        if (context == null) {
+            return;
         }
 
-        return inputView;
+        if (eventViewModel.getValues().size() < 1) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestLocationPermissionLauncher.launch(
+                        new String[]{
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                        });
+            } else {
+                initLocation(inputView);
+            }
+        } else {
+            restore(inputView, eventViewModel.getValues());
+        }
     }
 
     public EventViewModel.ValueViewModel createValue(InputValueView valueView) {
-        EventViewModel.ValueViewModel result = new EventViewModel.ValueViewModel();
-        result.tag.observe(this, tag -> {
-                    valueView.getTagNameView().setTagName(tag.getName());
-                    valueView.getTagNameView().invalidate();
-                }
-        );
-        result.value.observe(this, value -> {
-                    valueView.getValueView().setValue(value.getInputValue());
-                    valueView.getValueView().invalidate();
-                }
-        );
+        EventViewModel.ValueViewModel result = attacheValue(valueView, new EventViewModel.ValueViewModel());
         eventViewModel.getValues().add(result);
         return result;
+    }
+
+    private EventViewModel.ValueViewModel attacheValue(InputValueView valueView, EventViewModel.ValueViewModel target) {
+        target.tag.observe(getViewLifecycleOwner(), tag -> {
+                    valueView.getTagNameView().applyTag(tag);
+                }
+        );
+        target.value.observe(getViewLifecycleOwner(), value -> {
+                    valueView.getValueView().applyValue(value);
+                }
+        );
+        return target;
+    }
+
+    private void restore(InputView inputView, List<EventViewModel.ValueViewModel> src) {
+        for(EventViewModel.ValueViewModel item : src) {
+            attacheValue(inputView.restore(item), item);
+        }
     }
 
     @SuppressLint("MissingPermission")
     private void dispatchPermissionResponse(Map<String, Boolean> resultMap) {
         InputView mainView = (InputView) getView();
-        if (mainView == null) {
-            return;
-        }
-        if (hasPermission(resultMap, Manifest.permission.ACCESS_FINE_LOCATION)
-                || hasPermission(resultMap, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            initLocation(mainView);
-        } else {
+//        if (mainView == null || eventViewModel.getValues().size() > 0) {
+//            return;
+//        }
+//        if (hasPermission(resultMap, Manifest.permission.ACCESS_FINE_LOCATION)
+//                || hasPermission(resultMap, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+//            initLocation(mainView);
+//        } else {
             initNoLocation(mainView);
-        }
+//        }
     }
 
     @androidx.annotation.RequiresPermission(anyOf = {

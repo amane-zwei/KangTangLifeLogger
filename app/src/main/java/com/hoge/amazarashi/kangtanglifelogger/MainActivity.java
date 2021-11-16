@@ -24,13 +24,13 @@ public class MainActivity extends AppCompatActivity {
         layout.setId(viewId);
         this.setContentView(layout);
 
-        if (true || savedInstanceState == null) {
+        if (savedInstanceState == null) {
             InputFragment inputFragment = new InputFragment();
             inputFragment.setTargetView(layout);
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(layout.getId(), inputFragment)
+                    .replace(layout.getId(), inputFragment)
                     .commit();
         }
     }

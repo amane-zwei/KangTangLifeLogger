@@ -14,12 +14,12 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hoge.amazarashi.kangtanglifelogger.R;
-import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
-import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
 import com.hoge.amazarashi.kangtanglifelogger.fragments.dialogs.ExportDialog;
 import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService.EventRecord;
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
 import com.hoge.amazarashi.kangtanglifelogger.viewmodel.EventViewModel;
+
+import lombok.Setter;
 
 public class InputView extends CoordinatorLayout {
 
@@ -27,6 +27,8 @@ public class InputView extends CoordinatorLayout {
 
     private PeriodView periodView;
     private ScrollValuesView scrollValuesView;
+    @Setter
+    private ScrollValuesView.ValueProvider valueProvider = null;
 
     public InputView(Context context) {
         super(context);
@@ -125,19 +127,23 @@ public class InputView extends CoordinatorLayout {
         button.setOnClickListener((View view) -> listener.onSave(generateEvent()));
     }
 
-    public void setValueProvider(ScrollValuesView.ValueProvider provider) {
-        scrollValuesView.setValueProvider(provider);
+    public InputValueView add() {
+        InputValueView inputValueView = scrollValuesView.add();
+        return inputValueView.setValueRecord(valueProvider.get(inputValueView));
     }
 
-    public InputValueView add() {
-        return scrollValuesView.add();
+    public InputValueView restore(EventViewModel.ValueViewModel valueViewModel) {
+        InputValueView inputValueView = scrollValuesView.add();
+        inputValueView.applyValue(valueViewModel);
+        return inputValueView;
     }
 
     @androidx.annotation.RequiresPermission(anyOf = {
             "android.permission.ACCESS_COARSE_LOCATION",
             "android.permission.ACCESS_FINE_LOCATION"})
     public InputValueView addLocation() {
-        return scrollValuesView.addLocation();
+        InputValueView inputValueView = scrollValuesView.addLocation();
+        return inputValueView.setValueRecord(valueProvider.get(inputValueView));
     }
 
     private EventRecord generateEvent() {

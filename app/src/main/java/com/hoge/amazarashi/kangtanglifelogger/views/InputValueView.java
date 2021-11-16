@@ -89,6 +89,17 @@ public class InputValueView extends LinearLayout {
         deleteButton.setOnClickListener(listener);
     }
 
+    public void applyValue(EventViewModel.ValueViewModel valueViewModel) {
+        if (valueViewModel == null) {
+            return;
+        }
+        if (valueViewModel.tag != null) {
+            this.tagNameView.applyTag(valueViewModel.tag.getValue());
+        }
+        if (valueViewModel.value != null) {
+            this.valueView.applyValue(valueViewModel.value.getValue());
+        }
+    }
     public InputValueView setValueRecord(EventViewModel.ValueViewModel valueViewModel) {
         this.valueViewModel = valueViewModel;
         return this;
@@ -96,6 +107,7 @@ public class InputValueView extends LinearLayout {
 
     public class TagNameView extends LinearLayout {
         private final KTLLEditText tagName;
+        private String prev = null;
 
         public TagNameView(Context context) {
             super(context);
@@ -127,34 +139,45 @@ public class InputValueView extends LinearLayout {
         }
 
         private void onFocusChange(View view, boolean hasFocus) {
-            if (!hasFocus) {
-                findOrGenerateTag(getName());
+            String tmpName = getName();
+            if (!(hasFocus || equals(tmpName))) {
+                findOrGenerateTag(tmpName);
             }
         }
 
         private void findOrGenerateTag(String tagName) {
             ((KTLLApplication) getContext().getApplicationContext())
                     .getTagList()
-                    .findOrGenerate(tagName, valueViewModel.tag::postValue);
+                    .findOrGenerate(tagName, valueViewModel::putTag);
         }
 
-        private void applyValueRecord(Tag tag) {
-            valueViewModel.tag.setValue(tag);
-            if (tag != null) {
-                tagName.setText(tag.getName());
+        public void applyTag(Tag tag) {
+            if (tag != null && !equals(tag.getName())) {
+                setTagName(tag.getName());
             }
         }
 
         public void setTagName(String name) {
             tagName.setText(name);
+            prev = name;
         }
         public String getName() {
             String name = tagName.getText().toString();
             return name == null ? null : name.trim();
         }
+
+        private boolean equals(String target) {
+            if (prev == null) {
+                return target == null;
+            } else {
+                return prev.equals(target);
+            }
+        }
     }
 
     public class ValueView extends KTLLEditText {
+
+        private String prev = null;
 
         public ValueView(Context context) {
             super(context);
@@ -163,22 +186,38 @@ public class InputValueView extends LinearLayout {
         }
 
         private void onFocusChange(View view, boolean hasFocus) {
-            if (!hasFocus) {
-                String valueString = getValue();
+            String valueString = getValue();
+
+            if (!(hasFocus || equals(valueString))) {
                 Value value = new Value();
                 value.setInputValue(valueString);
                 value.setValue(valueString);
-                valueViewModel.value.setValue(value);
+                valueViewModel.putValue(value);
+            }
+        }
+
+        public void applyValue(Value value) {
+            if (value != null) {
+                setValue(value.getInputValue());
             }
         }
 
         public void setValue(String value) {
             setText(value);
+            prev = value;
         }
 
         public String getValue() {
             String value = getText().toString();
             return value == null ? null : value.trim();
+        }
+
+        private boolean equals(String value) {
+            if (prev == null) {
+                return value == null;
+            } else {
+                return prev.equals(value);
+            }
         }
     }
 }
