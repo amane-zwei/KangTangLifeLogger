@@ -90,19 +90,12 @@ public class InputValueView extends LinearLayout {
     }
 
     public void applyValue(EventViewModel.ValueViewModel valueViewModel) {
+        this.valueViewModel = valueViewModel;
         if (valueViewModel == null) {
             return;
         }
-        if (valueViewModel.tag != null) {
-            this.tagNameView.applyTag(valueViewModel.tag.getValue());
-        }
-        if (valueViewModel.value != null) {
-            this.valueView.applyValue(valueViewModel.value.getValue());
-        }
-    }
-    public InputValueView setValueRecord(EventViewModel.ValueViewModel valueViewModel) {
-        this.valueViewModel = valueViewModel;
-        return this;
+        this.tagNameView.applyTag(valueViewModel.tag);
+        this.valueView.applyValue(valueViewModel.value);
     }
 
     public class TagNameView extends LinearLayout {
@@ -141,6 +134,7 @@ public class InputValueView extends LinearLayout {
         private void onFocusChange(View view, boolean hasFocus) {
             String tmpName = getName();
             if (!(hasFocus || equals(tmpName))) {
+                prev = tmpName;
                 findOrGenerateTag(tmpName);
             }
         }
@@ -161,6 +155,7 @@ public class InputValueView extends LinearLayout {
             tagName.setText(name);
             prev = name;
         }
+
         public String getName() {
             String name = tagName.getText().toString();
             return name == null ? null : name.trim();

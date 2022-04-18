@@ -1,9 +1,16 @@
 package com.hoge.amazarashi.kangtanglifelogger.views;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
 import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService.ValueRecord;
@@ -15,57 +22,45 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ScrollValuesView extends ScrollView {
-
-    private final LinearLayout layout;
+public class ScrollValuesView extends RecyclerView {
 
     public ScrollValuesView(Context context) {
         super(context);
 
-        {
-            LinearLayout layout = this.layout = new LinearLayout(context);
-            layout.setOrientation(LinearLayout.VERTICAL);
-            layout.setPadding(0, 0, 0, 80);
-            addView(layout);
+        setLayoutManager(new LinearLayoutManager(context));
+    }
+
+    private static class ViewHolder extends RecyclerView.ViewHolder {
+        private final InputValueView inputValueView;
+        public ViewHolder(@NonNull InputValueView inputValueView) {
+            super(inputValueView);
+            this.inputValueView = inputValueView;
         }
     }
 
-    public InputValueView add() {
+    public static class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
-        final InputValueView inputValueView = new InputValueView(getContext());
+        private List<EventViewModel.ValueViewModel> values;
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(20, 20, 20, 0);
-        inputValueView.setLayoutParams(layoutParams);
-        layout.addView(inputValueView);
-        invalidate();
+        public Adapter attacheValues(List<EventViewModel.ValueViewModel> values) {
+            this.values = values;
+            return this;
+        }
 
-        return inputValueView;
-    }
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ViewHolder(new InputValueView(parent.getContext()));
+        }
 
-    @androidx.annotation.RequiresPermission(anyOf = {
-            "android.permission.ACCESS_COARSE_LOCATION",
-            "android.permission.ACCESS_FINE_LOCATION"})
-    public InputValueView addLocation() {
-        InputValueView result = add();
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            holder.inputValueView.applyValue(values.get(position));
+        }
 
-//        ((KTLLApplication) getContext().getApplicationContext())
-//                .getTagList()
-//                .findOrGenerate("location", locationValueRecord, () -> {});
-//
-//        ((KTLLApplication) getContext().getApplicationContext())
-//                .getLocationClient()
-//                .getLastLocation(getContext(), location -> {
-//                    locationValueRecord.getValue().setValue(location.toString());
-//                    result.applyValueRecord();
-//                });
-
-        return result;
-    }
-
-    public interface ValueProvider {
-        EventViewModel.ValueViewModel get(InputValueView view);
+        @Override
+        public int getItemCount() {
+            return values.size();
+        }
     }
 }

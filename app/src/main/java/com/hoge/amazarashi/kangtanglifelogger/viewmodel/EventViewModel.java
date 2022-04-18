@@ -7,6 +7,7 @@ import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLEvent;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Tag;
 import com.hoge.amazarashi.kangtanglifelogger.entities.Value;
+import com.hoge.amazarashi.kangtanglifelogger.views.ScrollValuesView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,9 @@ public class EventViewModel extends ViewModel {
     @Getter
     private final KTLLAction action;
 
-    @Getter
     private final List<ValueViewModel> values;
+    @Getter
+    private final ScrollValuesView.Adapter adapter;
 
     public EventViewModel() {
         this.event = new KTLLEvent();
@@ -30,37 +32,46 @@ public class EventViewModel extends ViewModel {
         this.event.add(this.action);
 
         values = new ArrayList<>();
+        adapter = new ScrollValuesView.Adapter();
+        adapter.attacheValues(values);
     }
 
-    public static class ValueViewModel {
-        public MutableLiveData<Tag> tag;
-        public MutableLiveData<Value> value;
+    public ValueViewModel addValue() {
+        ValueViewModel valueViewModel = new ValueViewModel();
+        values.add(valueViewModel);
+        adapter.notifyItemInserted(values.size() - 1);
+        return valueViewModel;
+    }
+
+    public class ValueViewModel {
+        public Tag tag;
+        public Value value;
 
         public ValueViewModel() {
-            tag = new MutableLiveData<>();
-            value = new MutableLiveData<>();
-            tag.setValue(new Tag());
-            value.setValue(new Value());
+            tag = new Tag();
+            value = new Value();
         }
 
         public void putTag(Tag tag) {
-            if (this.tag.getValue() != tag) {
-                this.tag.postValue(tag);
+            if (this.tag == tag) {
+                return;
             }
+            this.tag = tag;
+            adapter.notifyItemChanged(values.indexOf(this));
         }
 
         public void putValue(Value value) {
-            Value myValue = this.value.getValue();
-            if (myValue == null) {
+            if (this.value == null) {
                 if (value == null) {
                     return;
                 }
             } else {
-                if (myValue.equals(value)) {
+                if (this.value.equals(value)) {
                     return;
                 }
             }
-            this.value.postValue(value);
+            this.value = value;
+            adapter.notifyItemChanged(values.indexOf(this));
         }
     }
 }

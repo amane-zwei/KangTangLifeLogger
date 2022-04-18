@@ -19,16 +19,13 @@ import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService.Event
 import com.hoge.amazarashi.kangtanglifelogger.util.DisplayMetricsUtil;
 import com.hoge.amazarashi.kangtanglifelogger.viewmodel.EventViewModel;
 
-import lombok.Setter;
-
 public class InputView extends CoordinatorLayout {
 
     private final FloatingActionButton button;
 
     private PeriodView periodView;
     private ScrollValuesView scrollValuesView;
-    @Setter
-    private ScrollValuesView.ValueProvider valueProvider = null;
+    private EventViewModel eventViewModel;
 
     public InputView(Context context) {
         super(context);
@@ -71,9 +68,14 @@ public class InputView extends CoordinatorLayout {
                     mainViewId,
                     R.drawable.ic_baseline_add_24,
                     Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-            button.setOnClickListener(view -> scrollValuesView.add());
+            button.setOnClickListener(this::onAddValue);
             addView(button);
         }
+    }
+
+    public void attacheEventViewModel(EventViewModel eventViewModel) {
+        scrollValuesView.setAdapter(eventViewModel.getAdapter());
+        this.eventViewModel = eventViewModel;
     }
 
     private View createMainView(Context context) {
@@ -127,24 +129,23 @@ public class InputView extends CoordinatorLayout {
         button.setOnClickListener((View view) -> listener.onSave(generateEvent()));
     }
 
-    public InputValueView add() {
-        InputValueView inputValueView = scrollValuesView.add();
-        return inputValueView.setValueRecord(valueProvider.get(inputValueView));
+    private void onAddValue(View view) {
+        eventViewModel.addValue();
     }
 
-    public InputValueView restore(EventViewModel.ValueViewModel valueViewModel) {
-        InputValueView inputValueView = scrollValuesView.add();
-        inputValueView.applyValue(valueViewModel);
-        return inputValueView;
-    }
+//    public InputValueView restore(EventViewModel.ValueViewModel valueViewModel) {
+//        InputValueView inputValueView = scrollValuesView.add();
+//        inputValueView.applyValue(valueViewModel);
+//        return inputValueView;
+//    }
 
-    @androidx.annotation.RequiresPermission(anyOf = {
-            "android.permission.ACCESS_COARSE_LOCATION",
-            "android.permission.ACCESS_FINE_LOCATION"})
-    public InputValueView addLocation() {
-        InputValueView inputValueView = scrollValuesView.addLocation();
-        return inputValueView.setValueRecord(valueProvider.get(inputValueView));
-    }
+//    @androidx.annotation.RequiresPermission(anyOf = {
+//            "android.permission.ACCESS_COARSE_LOCATION",
+//            "android.permission.ACCESS_FINE_LOCATION"})
+//    public InputValueView addLocation() {
+//        InputValueView inputValueView = scrollValuesView.addLocation();
+//        return inputValueView.setValueRecord(valueProvider.get(inputValueView));
+//    }
 
     private EventRecord generateEvent() {
         return null;
