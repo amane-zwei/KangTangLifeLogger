@@ -1,6 +1,5 @@
 package com.hoge.amazarashi.kangtanglifelogger.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.hoge.amazarashi.kangtanglifelogger.entities.KTLLAction;

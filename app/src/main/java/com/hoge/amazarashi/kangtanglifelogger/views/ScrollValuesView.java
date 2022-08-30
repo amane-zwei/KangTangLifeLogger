@@ -1,26 +1,15 @@
 package com.hoge.amazarashi.kangtanglifelogger.views;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hoge.amazarashi.kangtanglifelogger.application.KTLLApplication;
-import com.hoge.amazarashi.kangtanglifelogger.service.RegisterEventService.ValueRecord;
 import com.hoge.amazarashi.kangtanglifelogger.viewmodel.EventViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public class ScrollValuesView extends RecyclerView {
 
@@ -55,7 +44,7 @@ public class ScrollValuesView extends RecyclerView {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.inputValueView.applyValue(values.get(position));
+            holder.inputValueView.applyViewModel(values.get(position));
         }
 
         @Override
